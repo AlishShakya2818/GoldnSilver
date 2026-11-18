@@ -1,12 +1,3 @@
-
-
-
-
-
-/* =========================================================
-   GOLD N SILVER RATES — WEBSITE INTERACTIONS
-   ========================================================= */
-
 document.addEventListener("DOMContentLoaded", () => {
   "use strict";
 
@@ -200,7 +191,7 @@ document.addEventListener("DOMContentLoaded", () => {
       date: "2 November 2026",
       title: "Reading a Daily Gold Rate Update",
       deck: "Learn how to interpret a rate announcement and what information to check before acting on it.",
-      excerpt: "A published rate is useful, but understanding its date, unit and purity is just as important.",
+      excerpt: "A published rate is useful, but understanding its date, unit and source is just as important.",
       readTime: "3 MIN READ",
       paragraphs: [
         {
@@ -254,7 +245,6 @@ document.addEventListener("DOMContentLoaded", () => {
     { date: "Nov 14", gold: 243800, silver: 3220 },
     { date: "Nov 15", gold: 245000, silver: 3250 }
   ];
-
   /* ---------------------------------------------------------
      2. ELEMENT REFERENCES
      --------------------------------------------------------- */
@@ -274,13 +264,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const themeToggle = $("themeToggle");
   const articleThemeToggle = $("articleThemeToggle");
 
-  const canvas = $("priceChart");
-  const chartContext = canvas ? canvas.getContext("2d") : null;
-
   let selectedMetal = "gold";
   let currentArticleId = null;
   let savedScrollPosition = 0;
-  let chartResizeObserver = null;
+  let refreshTradingViewTheme = null;
 
   /* ---------------------------------------------------------
      3. HELPERS
@@ -366,7 +353,9 @@ document.addEventListener("DOMContentLoaded", () => {
       // The page still works if browser storage is unavailable.
     }
 
-    drawChart();
+    if (refreshTradingViewTheme) {
+      refreshTradingViewTheme();
+    }
   }
 
   function toggleTheme() {
@@ -498,7 +487,7 @@ document.addEventListener("DOMContentLoaded", () => {
     featuredContainer.setAttribute("role", "button");
     featuredContainer.setAttribute("tabindex", "0");
     featuredContainer.setAttribute("aria-label", `Read ${featured.title}`);
-  }
+  };
 
   function renderArticles() {
     if (!articleGrid) return;
@@ -525,32 +514,23 @@ document.addEventListener("DOMContentLoaded", () => {
       return matchesCategory && searchableText.includes(query);
     });
 
-    const featured = filtered.find((article) => article.featured);
-    const remaining = filtered.filter((article) => article !== featured);
+    articleGrid.innerHTML = filtered.map(createArticleCard).join("");
 
-    if (featured && category === "All" && !query) {
-      renderFeaturedArticle();
-    } else if (featured && category === "Gold" && !query) {
-      renderFeaturedArticle();
-    } else {
-      if (featuredContainer) featuredContainer.hidden = true;
-    }
-
-    articleGrid.innerHTML = remaining.map(createArticleCard).join("");
-
-    if (filtered.length === 0) {
-      articleGrid.innerHTML = "";
-      if (featuredContainer) featuredContainer.hidden = true;
-      if (emptyMessage) emptyMessage.hidden = false;
-    } else if (emptyMessage) {
-      emptyMessage.hidden = true;
+    if (emptyMessage) {
+      emptyMessage.hidden = filtered.length !== 0;
     }
   }
 
+  renderFeaturedArticle();
   renderArticles();
 
-  if (searchInput) searchInput.addEventListener("input", renderArticles);
-  if (categoryFilter) categoryFilter.addEventListener("change", renderArticles);
+  if (searchInput) {
+    searchInput.addEventListener("input", renderArticles);
+  }
+
+  if (categoryFilter) {
+    categoryFilter.addEventListener("change", renderArticles);
+  }
 
   if (articleGrid) {
     articleGrid.addEventListener("click", (event) => {
@@ -559,10 +539,10 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     articleGrid.addEventListener("keydown", (event) => {
-      const card = event.target.closest("[data-article-id]");
-      if (!card) return;
+      if (event.key !== "Enter" && event.key !== " ") return;
 
-      if (event.key === "Enter" || event.key === " ") {
+      const card = event.target.closest("[data-article-id]");
+      if (card) {
         event.preventDefault();
         openArticle(Number(card.dataset.articleId));
       }
@@ -656,139 +636,103 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   /* ---------------------------------------------------------
-     10. PRICE HISTORY CHART
+     10. TRADINGVIEW INTERNATIONAL METALS CHART
+     TradingView's hosted widget supplies its own market data.
+     It does NOT supply Nepal's official retail gold/silver rate.
      --------------------------------------------------------- */
 
-  function drawChart() {
-    if (!canvas || !chartContext) return;
+  const tradingViewContainer = $("tradingviewChart");
+  const chartTitle = $("chartTitle");
+  const chartSymbol = $("chartSymbol");
 
-    const bounds = canvas.getBoundingClientRect();
-    if (bounds.width < 10 || bounds.height < 10) return;
-
-    const ratio = window.devicePixelRatio || 1;
-
-    canvas.width = Math.round(bounds.width * ratio);
-    canvas.height = Math.round(bounds.height * ratio);
-
-    chartContext.setTransform(ratio, 0, 0, ratio, 0, 0);
-
-    const width = bounds.width;
-    const height = bounds.height;
-
-    const padding = {
-      left: 58,
-      right: 12,
-      top: 18,
-      bottom: 30
-    };
-
-    const chartWidth = width - padding.left - padding.right;
-    const chartHeight = height - padding.top - padding.bottom;
-
-    const values = history.map((item) => item[selectedMetal]);
-    const min = Math.min(...values) * .997;
-    const max = Math.max(...values) * 1.003;
-    const range = max - min || 1;
-
-    const dark = document.documentElement.dataset.theme === "dark";
-    const grid = dark ? "#3c473e" : "#e4ded2";
-    const text = dark ? "#aeb8ac" : "#85877c";
-    const gold = dark ? "#d1ad65" : "#b18b43";
-
-    chartContext.clearRect(0, 0, width, height);
-    chartContext.font = "10px DM Sans, Arial";
-
-    for (let i = 0; i <= 4; i++) {
-      const y = padding.top + chartHeight * i / 4;
-      const value = max - range * i / 4;
-
-      chartContext.beginPath();
-      chartContext.strokeStyle = grid;
-      chartContext.lineWidth = 1;
-      chartContext.moveTo(padding.left, y);
-      chartContext.lineTo(width - padding.right, y);
-      chartContext.stroke();
-
-      chartContext.fillStyle = text;
-      chartContext.textAlign = "right";
-      chartContext.fillText(
-        Math.round(value).toLocaleString("en-IN"),
-        padding.left - 8,
-        y + 3
-      );
+  const tradingViewSymbols = {
+    gold: {
+      symbol: "OANDA:XAUUSD",
+      title: "Gold spot / US Dollar"
+    },
+    silver: {
+      symbol: "OANDA:XAGUSD",
+      title: "Silver spot / US Dollar"
     }
+  };
 
-    const points = values.map((value, index) => ({
-      x: padding.left + chartWidth * index / (values.length - 1),
-      y: padding.top + ((max - value) / range) * chartHeight
-    }));
+  let tradingViewStyle = "1"; // 1 = candlesticks, 2 = line
+  let tradingViewInterval = "60"; // 60-minute candles
 
-    // Draw the line.
-    chartContext.beginPath();
-    chartContext.strokeStyle = gold;
-    chartContext.lineWidth = 2.3;
-    chartContext.lineJoin = "round";
-    chartContext.lineCap = "round";
+  function mountTradingViewChart() {
+    if (!tradingViewContainer) return;
 
-    points.forEach((point, index) => {
-      if (index === 0) chartContext.moveTo(point.x, point.y);
-      else chartContext.lineTo(point.x, point.y);
+    const selected = tradingViewSymbols[selectedMetal] || tradingViewSymbols.gold;
+    const theme = document.documentElement.dataset.theme === "dark" ? "dark" : "light";
+
+    if (chartTitle) chartTitle.textContent = selected.title;
+    if (chartSymbol) chartSymbol.textContent = selected.symbol;
+
+    tradingViewContainer.innerHTML = "";
+
+    const widgetContainer = document.createElement("div");
+    widgetContainer.className = "tradingview-widget-container";
+    widgetContainer.style.width = "100%";
+    widgetContainer.style.height = "100%";
+
+    const widget = document.createElement("div");
+    widget.className = "tradingview-widget-container__widget";
+    widget.style.width = "100%";
+    widget.style.height = "100%";
+
+    const attribution = document.createElement("div");
+    attribution.className = "tradingview-attribution";
+
+    const attributionLink = document.createElement("a");
+    attributionLink.href = `https://www.tradingview.com/symbols/${selected.symbol.replace(":", "-")}/`;
+    attributionLink.target = "_blank";
+    attributionLink.rel = "noopener noreferrer";
+    attributionLink.textContent = "View on TradingView";
+
+    attribution.appendChild(attributionLink);
+
+    const script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src = "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js";
+    script.async = true;
+
+    script.textContent = JSON.stringify({
+      autosize: true,
+      symbol: selected.symbol,
+      interval: tradingViewInterval,
+      timezone: "Asia/Kathmandu",
+      theme,
+      style: tradingViewStyle,
+      locale: "en",
+      allow_symbol_change: false,
+      calendar: false,
+      support_host: "https://www.tradingview.com"
     });
 
-    chartContext.stroke();
+    widgetContainer.appendChild(widget);
+    widgetContainer.appendChild(attribution);
+    widgetContainer.appendChild(script);
 
-    // Draw small data points.
-    points.forEach((point) => {
-      chartContext.beginPath();
-      chartContext.fillStyle = gold;
-      chartContext.arc(point.x, point.y, 3, 0, Math.PI * 2);
-      chartContext.fill();
-    });
-
-    // Date labels.
-    chartContext.fillStyle = text;
-    chartContext.textAlign = "center";
-
-    history.forEach((item, index) => {
-      if (index % 2 === 0 || index === history.length - 1) {
-        const x = padding.left + chartWidth * index / (history.length - 1);
-        chartContext.fillText(item.date, x, height - 7);
-      }
-    });
-  }
-
-  function updateChart() {
-    const currentValue = selectedMetal === "gold"
-      ? rates.gold
-      : rates.silver;
-
-    setText("chartCurrentValue", money(currentValue));
-
-    document.querySelectorAll(".chart-tab").forEach((button) => {
-      button.classList.toggle(
-        "active",
-        button.dataset.metal === selectedMetal
-      );
-    });
-
-    drawChart();
+    tradingViewContainer.appendChild(widgetContainer);
   }
 
   document.querySelectorAll(".chart-tab").forEach((button) => {
     button.addEventListener("click", () => {
       selectedMetal = button.dataset.metal === "silver" ? "silver" : "gold";
-      updateChart();
+
+      document.querySelectorAll(".chart-tab").forEach((tab) => {
+        const active = tab.dataset.metal === selectedMetal;
+        tab.classList.toggle("active", active);
+        tab.setAttribute("aria-pressed", String(active));
+      });
+
+      mountTradingViewChart();
     });
   });
 
-  drawChart();
-
-  if (window.ResizeObserver && canvas) {
-    chartResizeObserver = new ResizeObserver(drawChart);
-    chartResizeObserver.observe(canvas);
-  } else {
-    window.addEventListener("resize", drawChart);
-  }
+  // Allow the theme manager (declared earlier) to refresh this hosted widget.
+  refreshTradingViewTheme = mountTradingViewChart;
+  mountTradingViewChart();
 
   /* ---------------------------------------------------------
      11. GOLD AND SILVER CALCULATOR

@@ -175,25 +175,28 @@
         <div class="chart-panel">
           <div class="chart-heading">
             <div>
-              <span class="panel-label">PRICE HISTORY</span>
-              <h3>Recent movement</h3>
+              <span class="panel-label">INTERNATIONAL MARKET · TRADINGVIEW</span>
+              <h3 id="chartTitle">Gold spot / US Dollar</h3>
             </div>
-            <div class="chart-tabs">
-              <button class="chart-tab active" data-metal="gold">Gold</button>
-              <button class="chart-tab" data-metal="silver">Silver</button>
+            <div class="chart-tabs" role="group" aria-label="Choose international metal chart">
+              <button class="chart-tab active" type="button" data-metal="gold" aria-pressed="true">Gold</button>
+              <button class="chart-tab" type="button" data-metal="silver" aria-pressed="false">Silver</button>
             </div>
           </div>
-          <div class="chart-summary">
-            <strong id="chartCurrentValue">Rs. 245,000</strong>
-            <span>Sample price · Per tola</span>
+          <div class="chart-summary tradingview-summary">
+            <strong id="chartSymbol">OANDA:XAUUSD</strong>
+            <span>International spot reference · USD per troy ounce</span>
           </div>
-          <div class="chart-container">
-            <canvas id="priceChart" aria-label="Sample precious metal price history chart"></canvas>
+          <div class="chart-container tradingview-container">
+            <div id="tradingviewChart" aria-label="TradingView international gold and silver chart">
+              <div class="tradingview-loading">Loading TradingView chart…</div>
+            </div>
           </div>
           <div class="chart-footer">
-            <span>LAST 10 SAMPLE DAYS</span>
-            <span>ILLUSTRATIVE DATA</span>
+            <span>DATA SOURCE: TRADINGVIEW / OANDA</span>
+            <span>NOT NEPAL RETAIL RATES</span>
           </div>
+          <p class="chart-disclaimer">This chart follows an international USD spot-market symbol, not Nepal's official per-tola rate. Data availability and timing depend on the selected provider and market session. Check the symbol and status shown in the TradingView chart.</p>
         </div>
 
         <aside class="market-aside">
