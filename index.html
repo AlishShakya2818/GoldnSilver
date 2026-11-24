@@ -27,6 +27,7 @@
 
     <!-- Supabase client configuration -->
     <script src="supabase-client.js" defer></script>
+    <script src="market-prices.js" defer></script>
 
     <!-- Authentication services -->
     <script src="auth.js" defer></script>
@@ -47,7 +48,7 @@
       <span class="announcement-date" id="announcementDate"></span>
       <span class="demo-label">
         <span class="status-dot"></span>
-        DEMO DATA · NOT LIVE
+        NEPAL RATES · SOURCE PENDING
       </span>
     </div>
 
@@ -82,18 +83,43 @@
 
         <div class="header-actions">
           <div class="notification-wrap">
-            <button class="icon-button notification-button" id="notificationBell" type="button" aria-label="Daily quiz notifications" aria-expanded="false" title="Daily quiz reminder">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4" /></svg>
-              <span class="notification-dot" id="notificationDot" aria-hidden="true"></span>
+            <button
+              class="icon-button notification-button"
+              id="notificationBell"
+              type="button"
+              aria-label="Daily quiz notifications"
+              aria-expanded="false"
+              title="Daily quiz reminder"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"
+                />
+              </svg>
+              <span
+                class="notification-dot"
+                id="notificationDot"
+                aria-hidden="true"
+              ></span>
             </button>
             <div class="notification-panel" id="notificationPanel" hidden>
               <p class="notification-panel-kicker">DAILY CHALLENGE</p>
-              <strong id="notificationText">Your daily question is ready.</strong>
-              <button type="button" id="notificationGoToQuiz">Go to today’s quiz ↗</button>
+              <strong id="notificationText"
+                >Your daily question is ready.</strong
+              >
+              <button type="button" id="notificationGoToQuiz">
+                Go to today’s quiz ↗
+              </button>
             </div>
           </div>
           <div class="account-menu-wrap">
-            <button class="account-button" id="accountButton" type="button" aria-haspopup="true" aria-expanded="false">
+            <button
+              class="account-button"
+              id="accountButton"
+              type="button"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
               <span id="accountButtonLabel">Sign in</span>
               <span aria-hidden="true">⌄</span>
             </button>
@@ -118,7 +144,13 @@
     <div class="daily-quiz-notice" id="dailyQuizNotice" role="status" hidden>
       <span class="daily-quiz-notice-icon">✦</span>
       <p id="dailyQuizNoticeText">Today’s quiz is ready.</p>
-      <button type="button" id="closeDailyQuizNotice" aria-label="Dismiss reminder">×</button>
+      <button
+        type="button"
+        id="closeDailyQuizNotice"
+        aria-label="Dismiss reminder"
+      >
+        ×
+      </button>
     </div>
 
     <!-- MOBILE SIDEBAR -->
@@ -231,7 +263,7 @@
           </div>
 
           <p class="section-aside">
-            Indicative sample prices<br />
+            Verified local rates<br />
             Per tola · Nepalese Rupees
           </p>
         </div>
@@ -246,20 +278,18 @@
 
             <p class="metal-name">Fine Gold</p>
 
-            <div class="rate-value" id="goldRate">Rs. 245,000</div>
+            <div class="rate-value" id="goldRate">Not available</div>
 
             <div class="rate-card-bottom">
               <span class="rate-unit">PER TOLA</span>
-              <span class="rate-change positive" id="goldChange">
-                ▲ Rs. 1,200
+              <span class="rate-change" id="goldChange">
+                Awaiting verified source
               </span>
             </div>
 
             <div class="rate-card-line"></div>
 
-            <p class="rate-footnote">
-              Sample reference price · Verify before purchase
-            </p>
+            <p class="rate-footnote">Verified Nepal rate not connected</p>
           </article>
 
           <article class="rate-card silver-card">
@@ -271,20 +301,18 @@
 
             <p class="metal-name">Silver</p>
 
-            <div class="rate-value" id="silverRate">Rs. 3,250</div>
+            <div class="rate-value" id="silverRate">Not available</div>
 
             <div class="rate-card-bottom">
               <span class="rate-unit">PER TOLA</span>
-              <span class="rate-change positive" id="silverChange">
-                ▲ Rs. 45
+              <span class="rate-change" id="silverChange">
+                Awaiting verified source
               </span>
             </div>
 
             <div class="rate-card-line"></div>
 
-            <p class="rate-footnote">
-              Sample reference price · Verify before purchase
-            </p>
+            <p class="rate-footnote">Verified Nepal rate not connected</p>
           </article>
         </div>
 
@@ -303,8 +331,8 @@
           </div>
 
           <p class="section-aside">
-            A sample view of recent<br />
-            price movement
+            International spot-market<br />
+            reference charts
           </p>
         </div>
 
@@ -353,6 +381,69 @@
             </div>
 
             <div class="chart-container tradingview-container">
+              <!-- International spot prices -->
+              <div class="international-prices" id="internationalPricePanel">
+                <div class="international-prices-heading">
+                  <div>
+                    <span class="international-eyebrow">GLOBAL MARKET</span>
+                    <h3>International Spot Prices</h3>
+                    <p>USD per troy ounce · GoldAPI</p>
+                  </div>
+                  <span
+                    class="international-live-status"
+                    id="internationalPriceStatus"
+                  >
+                    Connecting...
+                  </span>
+                </div>
+
+                <div class="international-price-grid">
+                  <article class="international-price-card">
+                    <span class="international-metal-label"
+                      >GOLD · XAU/USD</span
+                    >
+                    <strong id="internationalGoldPrice">Loading...</strong>
+                    <span class="international-price-unit"
+                      >USD / troy ounce</span
+                    >
+                    <span
+                      class="international-updated"
+                      id="internationalGoldUpdated"
+                    >
+                      Waiting for price data
+                    </span>
+                  </article>
+
+                  <article class="international-price-card">
+                    <span class="international-metal-label"
+                      >SILVER · XAG/USD</span
+                    >
+                    <strong id="internationalSilverPrice">Loading...</strong>
+                    <span class="international-price-unit"
+                      >USD / troy ounce</span
+                    >
+                    <span
+                      class="international-updated"
+                      id="internationalSilverUpdated"
+                    >
+                      Waiting for price data
+                    </span>
+                  </article>
+                </div>
+
+                <p class="international-price-disclaimer">
+                  International spot-market reference prices, not official Nepal
+                  retail gold or silver rates. Data provided by
+                  <a
+                    href="https://goldapi.dev/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    GoldAPI </a
+                  >.
+                </p>
+              </div>
+              <!-- End international spot prices -->
               <div
                 id="tradingviewChart"
                 aria-label="TradingView international gold and silver chart"
@@ -364,15 +455,16 @@
             </div>
 
             <div class="chart-footer">
-              <span>DATA SOURCE: TRADINGVIEW / OANDA</span>
+              <span>CHART EMBED: TRADINGVIEW · OANDA SYMBOL</span>
               <span>NOT NEPAL RETAIL RATES</span>
             </div>
 
             <p class="chart-disclaimer">
-              This chart follows an international USD spot-market symbol, not
-              Nepal's official per-tola rate. Data availability and timing
-              depend on the selected provider and market session. Check the
-              symbol and status shown in the TradingView chart.
+              This is an international USD chart using the selected TradingView
+              symbol. It is not Nepal's official per-tola rate. TradingView's
+              widget may show delayed data depending on the underlying market
+              and data entitlement. Check the symbol and any delay/status
+              information shown in the chart.
             </p>
           </div>
 
@@ -381,8 +473,8 @@
             <h3>Across <em>Nepal</em></h3>
 
             <p class="muted-copy">
-              Sample reference rates across selected cities. Local prices may
-              vary.
+              City-wise Nepal rates are not available until a verified local
+              source is connected.
             </p>
 
             <div class="regional-list" id="regionalGrid"></div>
@@ -455,7 +547,9 @@
                 >
                   Submit answer ↗
                 </button>
-                <button class="quiz-quit-button" id="quizQuit" type="button">Quit quiz</button>
+                <button class="quiz-quit-button" id="quizQuit" type="button">
+                  Quit quiz
+                </button>
               </div>
 
               <div
@@ -536,7 +630,7 @@
               <h3>Higher or <em>lower?</em></h3>
               <p>Make your call on the next market movement.</p>
             </div>
-            <span class="preview-tag">INTERACTIVE PREVIEW</span>
+            <span class="preview-tag">COMING AFTER DATA CONNECTION</span>
           </div>
 
           <div class="prediction-grid">
@@ -548,7 +642,7 @@
                   <span class="prediction-label">GOLD MARKET</span>
                   <h4>Gold / USD</h4>
                 </div>
-                <span class="prediction-status">PREVIEW</span>
+                <span class="prediction-status">NOT CONNECTED</span>
               </div>
 
               <div class="prediction-price">
@@ -596,7 +690,7 @@
                   <span class="prediction-label">SILVER MARKET</span>
                   <h4>Silver / USD</h4>
                 </div>
-                <span class="prediction-status">PREVIEW</span>
+                <span class="prediction-status">NOT CONNECTED</span>
               </div>
 
               <div class="prediction-price">
@@ -638,9 +732,10 @@
           </div>
 
           <p class="prediction-disclaimer">
-            This is an educational market prediction game, not financial advice
-            or a financial betting product. Provider prices and prediction
-            rounds are not connected in this preview.
+            This is intended as an educational market prediction game, not
+            financial advice or a betting product. Live provider prices and
+            prediction rounds are not connected yet, so no predictions can
+            currently be submitted.
           </p>
         </div>
 
@@ -765,7 +860,8 @@
         <div class="article-grid" id="articleGrid"></div>
 
         <p class="article-empty" id="articleEmpty" hidden>
-          No stories match your search. Try another keyword or topic.
+          No approved articles have been published yet. New stories will appear
+          here after editorial content is connected and approved.
         </p>
       </section>
 
@@ -1100,7 +1196,15 @@
                 minlength="8"
                 required
               />
-              <button class="password-visibility" type="button" data-toggle-password="authPassword" aria-label="Show password" aria-pressed="false">Show</button>
+              <button
+                class="password-visibility"
+                type="button"
+                data-toggle-password="authPassword"
+                aria-label="Show password"
+                aria-pressed="false"
+              >
+                Show
+              </button>
             </div>
           </div>
 
@@ -1114,7 +1218,15 @@
                 placeholder="Enter your password again"
                 minlength="8"
               />
-              <button class="password-visibility" type="button" data-toggle-password="authConfirmPassword" aria-label="Show confirm password" aria-pressed="false">Show</button>
+              <button
+                class="password-visibility"
+                type="button"
+                data-toggle-password="authConfirmPassword"
+                aria-label="Show confirm password"
+                aria-pressed="false"
+              >
+                Show
+              </button>
             </div>
           </div>
 
