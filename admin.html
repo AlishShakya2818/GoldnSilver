@@ -1,0 +1,329 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#172f26" />
+  <title>Admin Dashboard | Gold N Silver Rates</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="admin.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+  <script src="supabase-client.js" defer></script>
+  <script src="admin.js" defer></script>
+</head>
+<body>
+  <div class="admin-demo-banner">
+    <span>GOLD N SILVER RATES</span>
+    <span>LIVE QUIZ CONTENT MANAGEMENT</span>
+  </div>
+
+  <div class="admin-shell">
+    <aside class="admin-sidebar" id="adminSidebar">
+      <a class="admin-brand" href="index.html">
+        <span class="admin-brand-mark">◆</span>
+        <span>
+          <strong>GOLD N SILVER</strong>
+          <small>ADMINISTRATION</small>
+        </span>
+      </a>
+
+      <div class="admin-nav-label">WORKSPACE</div>
+      <nav class="admin-nav">
+        <button class="admin-nav-link active" data-view="overview">
+          <span>▦</span> Overview
+        </button>
+        <button class="admin-nav-link" data-view="questions">
+          <span>✎</span> Daily Quiz
+        </button>
+        <button class="admin-nav-link" data-view="predictions">
+          <span>↗</span> Predictions · later
+        </button>
+        <button class="admin-nav-link" data-view="comments">
+          <span>☷</span> Comments · later
+        </button>
+        <button class="admin-nav-link" data-view="users">
+          <span>♙</span> Users · later
+        </button>
+        <button class="admin-nav-link" data-view="rewards">
+          <span>✦</span> Rewards · later
+        </button>
+      </nav>
+
+      <div class="admin-sidebar-bottom">
+        <div class="admin-profile">
+          <div class="admin-avatar">A</div>
+          <div>
+            <strong id="adminProfileName">Administrator</strong>
+            <small>Verified account</small>
+          </div>
+        </div>
+        <a href="index.html" class="back-to-site">← Back to website</a>
+      </div>
+    </aside>
+
+    <main class="admin-main">
+      <header class="admin-topbar">
+        <button class="admin-mobile-menu" id="adminMenuButton" aria-label="Toggle menu">☰</button>
+        <div>
+          <p class="admin-breadcrumb">WORKSPACE / <span id="breadcrumbName">OVERVIEW</span></p>
+          <h1 id="pageTitle">Dashboard overview</h1>
+        </div>
+        <div class="admin-top-actions">
+          <span class="demo-status"><i></i> CHECKING ACCESS</span>
+          <button class="admin-icon-button" id="adminSignOutButton" type="button" title="Sign out">↪</button>
+          <button class="admin-icon-button" id="adminThemeButton" aria-label="Toggle theme">☾</button>
+        </div>
+      </header>
+
+      <div class="admin-content">
+        <div class="admin-access-message" id="adminAccessMessage" role="status">Checking administrator access…</div>
+
+        <!-- OVERVIEW -->
+        <section class="admin-view active" id="view-overview">
+          <div class="welcome-row">
+            <div>
+              <p class="admin-eyebrow">YOUR CONTROL CENTRE</p>
+              <h2>Good evening, <em>Administrator.</em></h2>
+              <p>Here's what's happening across your community today.</p>
+            </div>
+            <div class="today-label" id="adminToday"></div>
+          </div>
+
+          <div class="stat-grid">
+            <article class="admin-stat-card">
+              <div class="stat-top"><span>TOTAL USERS</span><b>♙</b></div>
+              <strong>—</strong>
+              <small>Live account analytics will be added later</small>
+            </article>
+            <article class="admin-stat-card">
+              <div class="stat-top"><span>QUIZ PLAYS TODAY</span><b>✦</b></div>
+              <strong id="overviewQuizPlays">—</strong>
+              <small>Recorded quiz attempts today</small>
+            </article>
+            <article class="admin-stat-card">
+              <div class="stat-top"><span>ACTIVE PREDICTIONS</span><b>↗</b></div>
+              <strong>—</strong>
+              <small>Prediction module not connected</small>
+            </article>
+            <article class="admin-stat-card">
+              <div class="stat-top"><span>PENDING COMMENTS</span><b>☷</b></div>
+              <strong>—</strong>
+              <small>Comment moderation will be connected later</small>
+            </article>
+          </div>
+
+          <div class="admin-two-column">
+            <article class="admin-panel">
+              <div class="panel-heading">
+                <div>
+                  <p class="admin-eyebrow">QUICK ACCESS</p>
+                  <h3>Manage your platform</h3>
+                </div>
+              </div>
+              <div class="quick-actions">
+                <button data-go="questions"><span>✎</span><strong>Create quiz question</strong><small>Prepare the next daily quiz</small><b>→</b></button>
+                <button type="button" data-go="questions"><span>＋</span><strong>Schedule the next question</strong><small>Choose a future Nepal calendar date</small><b>→</b></button>
+              </div>
+            </article>
+
+            <article class="admin-panel">
+              <div class="panel-heading">
+                <div>
+                  <p class="admin-eyebrow">PLATFORM HEALTH</p>
+                  <h3>System overview</h3>
+                </div>
+                <span class="demo-pill">SERVICE STATUS</span>
+              </div>
+              <div class="health-row"><span>Website frontend</span><strong class="health-ok">● Loaded</strong></div>
+              <div class="health-row"><span>Daily quiz database</span><strong class="health-pending" id="quizDatabaseHealth">● Checking</strong></div>
+              <div class="health-row"><span>Market API</span><strong class="health-pending">● Not connected</strong></div>
+              <div class="health-row"><span>Editorial imports</span><strong class="health-pending">● Not connected</strong></div>
+            </article>
+          </div>
+
+          <article class="admin-panel activity-panel">
+            <div class="panel-heading">
+              <div>
+                <p class="admin-eyebrow">LATEST UPDATES</p>
+                <h3>Recent activity</h3>
+              </div>
+            </div>
+            <div class="activity-list">
+              <div><span class="activity-dot gold"></span><p><strong>Daily quiz content</strong><small>Questions are managed and scheduled from the Daily Quiz section.</small></p><time>Live</time></div>
+              <div><span class="activity-dot green"></span><p><strong>Automatic scoring</strong><small>Supabase validates answers and awards 10 points for correct responses.</small></p><time>Live</time></div>
+              <div><span class="activity-dot orange"></span><p><strong>Other modules</strong><small>Predictions, user management and editorial controls are not connected yet.</small></p><time>Later</time></div>
+            </div>
+          </article>
+        </section>
+
+        <!-- QUESTIONS -->
+        <section class="admin-view" id="view-questions">
+          <div class="view-heading">
+            <div>
+              <p class="admin-eyebrow">CONTENT MANAGEMENT</p>
+              <h2>Daily <em>quiz manager</em></h2>
+              <p>Create and manage the questions shown to website visitors.</p>
+            </div>
+            <button class="admin-primary-button" id="addQuestionButton">＋ Add question</button>
+          </div>
+
+          <div class="admin-info-strip">
+            <span>✦</span>
+            <p>Questions are saved in Supabase. Publish a question and choose its Nepal calendar date to schedule it. Visitors see only the assigned question; answer keys remain private until they submit.</p>
+          </div>
+
+          <div class="admin-panel">
+            <div class="panel-heading">
+              <div><h3>Question bank</h3><small id="questionCount">0 questions</small></div>
+              <span class="demo-pill">SUPABASE QUESTION BANK</span>
+            </div>
+            <div class="table-wrap">
+              <table class="admin-table">
+                <thead>
+                  <tr><th>QUESTION</th><th>ANSWER</th><th>STATUS</th><th>ACTIONS</th></tr>
+                </thead>
+                <tbody id="questionTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- PREDICTIONS -->
+        <section class="admin-view" id="view-predictions">
+          <div class="view-heading">
+            <div>
+              <p class="admin-eyebrow">MARKET ENGAGEMENT</p>
+              <h2>Gold <em>predictions</em></h2>
+              <p>Review the current round and how visitors are participating.</p>
+            </div>
+            <span class="demo-pill">SAMPLE DATA</span>
+          </div>
+
+          <div class="prediction-summary">
+            <article class="prediction-feature">
+              <div class="prediction-feature-top"><span>DAILY GOLD ROUND</span><span class="live-demo-dot">● OPEN · DEMO</span></div>
+              <h3>Will gold move <em>higher or lower?</em></h3>
+              <p>International Gold · XAU/USD</p>
+              <div class="prediction-price-row"><span>Sample reference price</span><strong>$4,085.20</strong></div>
+              <div class="prediction-deadline">Round closes at the next scheduled market cutoff in the live version.</div>
+            </article>
+            <div class="prediction-side-stats">
+              <article class="admin-stat-card"><span>TOTAL PREDICTIONS</span><strong>418</strong><small>Sample participation</small></article>
+              <article class="admin-stat-card"><span>HIGHER</span><strong>261</strong><small>62.4% of sample votes</small></article>
+              <article class="admin-stat-card"><span>LOWER</span><strong>157</strong><small>37.6% of sample votes</small></article>
+            </div>
+          </div>
+
+          <article class="admin-panel">
+            <div class="panel-heading"><div><h3>Round configuration</h3><small>Controls to be connected to the backend later</small></div></div>
+            <div class="settings-grid">
+              <label>Market instrument<input value="XAU/USD — Gold spot" disabled /></label>
+              <label>Market price provider<input value="Provider API — not connected" disabled /></label>
+              <label>Settlement method<input value="Completed daily market candle" disabled /></label>
+              <label>Round status<input value="Open — demonstration only" disabled /></label>
+            </div>
+          </article>
+        </section>
+
+        <!-- COMMENTS -->
+        <section class="admin-view" id="view-comments">
+          <div class="view-heading">
+            <div>
+              <p class="admin-eyebrow">COMMUNITY MANAGEMENT</p>
+              <h2>Comment <em>moderation</em></h2>
+              <p>Review comments submitted with prediction explanations.</p>
+            </div>
+          </div>
+          <div class="admin-info-strip"><span>!</span><p>Only approved comments should be displayed publicly. These are sample comments for the prototype.</p></div>
+          <div class="comment-list" id="commentList"></div>
+        </section>
+
+        <!-- USERS -->
+        <section class="admin-view" id="view-users">
+          <div class="view-heading">
+            <div>
+              <p class="admin-eyebrow">COMMUNITY</p>
+              <h2>Registered <em>users</em></h2>
+              <p>A preview of the future user management area.</p>
+            </div>
+          </div>
+          <div class="admin-panel">
+            <div class="panel-heading"><h3>Sample user directory</h3><span class="demo-pill">SAMPLE DATA</span></div>
+            <div class="table-wrap">
+              <table class="admin-table">
+                <thead><tr><th>USER</th><th>JOINED</th><th>POINTS</th><th>STREAK</th><th>STATUS</th></tr></thead>
+                <tbody>
+                  <tr><td><strong>marketwatcher</strong><small>market@example.com</small></td><td>12 Nov 2026</td><td>420</td><td>12 days</td><td><span class="status-chip approved">Active</span></td></tr>
+                  <tr><td><strong>goldenthoughts</strong><small>gold@example.com</small></td><td>10 Nov 2026</td><td>285</td><td>7 days</td><td><span class="status-chip approved">Active</span></td></tr>
+                  <tr><td><strong>silverline</strong><small>silver@example.com</small></td><td>08 Nov 2026</td><td>160</td><td>3 days</td><td><span class="status-chip approved">Active</span></td></tr>
+                  <tr><td><strong>bullionreader</strong><small>reader@example.com</small></td><td>05 Nov 2026</td><td>95</td><td>1 day</td><td><span class="status-chip pending">New</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- REWARDS -->
+        <section class="admin-view" id="view-rewards">
+          <div class="view-heading">
+            <div>
+              <p class="admin-eyebrow">ENGAGEMENT SETTINGS</p>
+              <h2>Rewards & <em>badges</em></h2>
+              <p>Preview the achievement system planned for registered members.</p>
+            </div>
+          </div>
+          <div class="badge-grid">
+            <article class="badge-card"><span>✦</span><strong>First Step</strong><small>Complete your first quiz</small><b>10 points</b></article>
+            <article class="badge-card"><span>◆</span><strong>3-Day Streak</strong><small>Play three days in a row</small><b>25 points</b></article>
+            <article class="badge-card"><span>✧</span><strong>Weekly Learner</strong><small>Maintain a 7-day streak</small><b>50 points</b></article>
+            <article class="badge-card"><span>♛</span><strong>Market Scholar</strong><small>Maintain a 30-day streak</small><b>150 points</b></article>
+          </div>
+          <div class="admin-info-strip"><span>i</span><p>Reward points and badge awards will be calculated and verified by the backend in the live version. They have no cash value.</p></div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- QUESTION EDITOR -->
+  <div class="admin-modal" id="questionModal" aria-hidden="true">
+    <div class="admin-modal-card">
+      <div class="modal-heading">
+        <div><p class="admin-eyebrow">QUESTION EDITOR</p><h3 id="questionModalTitle">Add a question</h3></div>
+        <button id="closeQuestionModal" class="modal-close" aria-label="Close">×</button>
+      </div>
+      <form id="questionForm">
+        <input type="hidden" id="editQuestionId" />
+        <label>Question text<textarea id="questionText" rows="3" required maxlength="1000" placeholder="Write your daily question..."></textarea></label>
+        <div class="modal-options-grid">
+          <label>Option A<input id="optionA" required maxlength="300" /></label>
+          <label>Option B<input id="optionB" required maxlength="300" /></label>
+          <label>Option C<input id="optionC" required maxlength="300" /></label>
+          <label>Option D<input id="optionD" required maxlength="300" /></label>
+        </div>
+        <label>Correct answer
+          <select id="correctAnswer">
+            <option value="0">Option A</option>
+            <option value="1">Option B</option>
+            <option value="2">Option C</option>
+            <option value="3">Option D</option>
+          </select>
+        </label>
+        <label>Explanation<textarea id="questionExplanation" rows="3" required maxlength="1000" placeholder="Explain why this answer is correct..."></textarea></label>
+        <label>Schedule date (Nepal time)<input id="questionScheduleDate" type="date" /></label>
+        <label class="publish-toggle"><input type="checkbox" id="questionPublished" /> Publish and schedule this question</label>
+        <div class="modal-actions">
+          <button type="button" class="admin-secondary-button" id="cancelQuestion">Cancel</button>
+          <button type="submit" class="admin-primary-button">Save question</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="admin-toast" id="adminToast" role="status"></div>
+</body>
+</html>

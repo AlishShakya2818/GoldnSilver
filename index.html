@@ -1,365 +1,131 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" data-theme="light">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#f5f1e8">
-  <meta name="description" content="Gold and silver rates in Nepal, precious metals news, market updates and useful calculators.">
-  <title>Gold N Silver Rates | Nepal</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-  <script src="script.js" defer></script>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f5f1e8" />
+    <meta
+      name="description"
+      content="Gold and silver rates in Nepal, precious metals news, market updates and useful calculators."
+    />
+    <title>Gold N Silver Rates | Nepal</title>
 
-  <div class="announcement">
-    <span>THE NEPAL PRECIOUS METALS JOURNAL</span>
-    <span class="announcement-date" id="announcementDate"></span>
-    <span class="demo-label">DEMO RATES · NOT LIVE</span>
-  </div>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
 
-  <header class="site-header" id="siteHeader">
-    <div class="header-inner">
-      <button class="icon-button menu-button" id="menuButton" aria-label="Open navigation" aria-expanded="false">
-        <span class="hamburger"><i></i><i></i><i></i></span>
-      </button>
+    <link rel="stylesheet" href="style.css" />
 
-      <a class="brand" href="#home" aria-label="Gold N Silver Rates home">
-        <span class="brand-mark">◆</span>
-        <span class="brand-copy">
-          <strong>GOLD N SILVER</strong>
-          <small>RATES · NEPAL</small>
-        </span>
-      </a>
+    <!-- Supabase JavaScript library -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+      defer
+    ></script>
 
-      <nav class="desktop-nav" aria-label="Main navigation">
-        <a href="#home">Home</a>
-        <a href="#rates">Today's Rates</a>
-        <a href="#market">Market Watch</a>
-        <a href="#articles">Articles</a>
-        <a href="#tools">Tools</a>
-      </nav>
+    <!-- Supabase client configuration -->
+    <script src="supabase-client.js" defer></script>
 
-      <div class="header-actions">
-        <button class="icon-button theme-button" id="themeToggle" aria-label="Switch theme">
-          <span id="themeIcon">☾</span>
+    <!-- Authentication services -->
+    <script src="auth.js" defer></script>
+    <script src="auth-ui.js" defer></script>
+
+    <!-- Existing website functionality -->
+    <script src="script.js" defer></script>
+
+    <!-- Existing daily quiz -->
+    <script src="quiz.js" defer></script>
+    <script src="challenge-extras.js" defer></script>
+  </head>
+
+  <body>
+    <!-- ANNOUNCEMENT BAR -->
+    <div class="announcement">
+      <span>THE NEPAL PRECIOUS METALS JOURNAL</span>
+      <span class="announcement-date" id="announcementDate"></span>
+      <span class="demo-label">
+        <span class="status-dot"></span>
+        DEMO DATA · NOT LIVE
+      </span>
+    </div>
+
+    <!-- HEADER -->
+    <header class="site-header" id="siteHeader">
+      <div class="header-inner">
+        <button
+          class="icon-button menu-button"
+          id="menuButton"
+          aria-label="Open navigation"
+          aria-expanded="false"
+        >
+          <span class="hamburger"><i></i><i></i><i></i></span>
         </button>
-        <a class="header-cta" href="#rates">Explore Rates <span>↗</span></a>
-      </div>
-    </div>
-  </header>
 
-  <div class="sidebar-overlay" id="sidebarOverlay"></div>
-  <aside class="sidebar" id="sidebar" aria-label="Mobile navigation">
-    <div class="sidebar-top">
-      <a class="brand" href="#home">
-        <span class="brand-mark">◆</span>
-        <span class="brand-copy">
-          <strong>GOLD N SILVER</strong>
-          <small>RATES · NEPAL</small>
-        </span>
-      </a>
-      <button class="icon-button" id="closeSidebar" aria-label="Close navigation">×</button>
-    </div>
-    <p class="sidebar-caption">NAVIGATION</p>
-    <nav class="sidebar-nav">
-      <a href="#home">01 <span>Home</span></a>
-      <a href="#rates">02 <span>Today's Rates</span></a>
-      <a href="#market">03 <span>Market Watch</span></a>
-      <a href="#articles">04 <span>Articles & Guides</span></a>
-      <a href="#tools">05 <span>Calculators</span></a>
-      <a href="#about">06 <span>About</span></a>
-    </nav>
-    <div class="sidebar-bottom">
-      <span>GOLD N SILVER RATES</span>
-      <small>Independent market information · Nepal</small>
-    </div>
-  </aside>
-
-  <main id="home">
-    <section class="hero section-wrap">
-      <div class="hero-kicker"><span></span> PRECIOUS METALS · NEPAL</div>
-      <div class="hero-grid">
-        <div class="hero-main">
-          <p class="eyebrow">THE DAILY MARKET EDITION</p>
-          <h1>Know the value.<br><em>Understand the market.</em></h1>
-          <p class="hero-description">
-            A considered look at gold and silver prices in Nepal.
-            Follow daily rates, explore market movements and make
-            more informed decisions.
-          </p>
-          <div class="hero-links">
-            <a class="button button-dark" href="#rates">View today's rates <span>↗</span></a>
-            <a class="text-link" href="#articles">Read market stories <span>→</span></a>
-          </div>
-        </div>
-        <div class="hero-side">
-          <div class="hero-note">
-            <span class="note-number">01</span>
-            <span class="note-rule"></span>
-            <p>MARKET INFORMATION<br>FOR EVERYDAY DECISIONS</p>
-          </div>
-          <div class="hero-ornament" aria-hidden="true">
-            <span class="ornament-ring ring-one"></span>
-            <span class="ornament-ring ring-two"></span>
-            <span class="ornament-center">Au</span>
-            <span class="ornament-caption">EST. NEPAL</span>
-          </div>
-          <p class="hero-date">EDITION DATE <strong id="heroDate"></strong></p>
-        </div>
-      </div>
-      <div class="hero-bottomline">
-        <span>GOLD · SILVER · MARKET INSIGHT</span>
-        <span>SCROLL TO EXPLORE ↓</span>
-      </div>
-    </section>
-
-    <section class="rates-section section-wrap" id="rates">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">THE NUMBERS TODAY</p>
-          <h2>Today's <em>rates</em></h2>
-        </div>
-        <p class="section-aside">Indicative sample prices<br>Per tola · Nepalese Rupees</p>
-      </div>
-
-      <div class="rate-grid">
-        <article class="rate-card gold-card">
-          <div class="rate-card-top">
-            <span class="metal-symbol">Au</span>
-            <span class="rate-tag">GOLD</span>
-            <span class="rate-date" id="goldDate"></span>
-          </div>
-          <p class="metal-name">Fine Gold</p>
-          <div class="rate-value" id="goldRate">Rs. 245,000</div>
-          <div class="rate-card-bottom">
-            <span class="rate-unit">PER TOLA</span>
-            <span class="rate-change positive" id="goldChange">▲ Rs. 1,200</span>
-          </div>
-          <div class="rate-card-line"></div>
-          <p class="rate-footnote">Sample reference price · Verify before purchase</p>
-        </article>
-
-        <article class="rate-card silver-card">
-          <div class="rate-card-top">
-            <span class="metal-symbol silver-symbol">Ag</span>
-            <span class="rate-tag">SILVER</span>
-            <span class="rate-date" id="silverDate"></span>
-          </div>
-          <p class="metal-name">Silver</p>
-          <div class="rate-value" id="silverRate">Rs. 3,250</div>
-          <div class="rate-card-bottom">
-            <span class="rate-unit">PER TOLA</span>
-            <span class="rate-change positive" id="silverChange">▲ Rs. 45</span>
-          </div>
-          <div class="rate-card-line"></div>
-          <p class="rate-footnote">Sample reference price · Verify before purchase</p>
-        </article>
-      </div>
-      <p class="rate-disclaimer">These are demonstration figures for the frontend preview. They are not official or current market quotations.</p>
-    </section>
-
-    <section class="market-section section-wrap" id="market">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">A CLOSER LOOK</p>
-          <h2>Market <em>watch</em></h2>
-        </div>
-        <p class="section-aside">A sample view of recent<br>price movement</p>
-      </div>
-
-      <div class="market-layout">
-        <div class="chart-panel">
-          <div class="chart-heading">
-            <div>
-              <span class="panel-label">INTERNATIONAL MARKET · TRADINGVIEW</span>
-              <h3 id="chartTitle">Gold spot / US Dollar</h3>
-            </div>
-            <div class="chart-tabs" role="group" aria-label="Choose international metal chart">
-              <button class="chart-tab active" type="button" data-metal="gold" aria-pressed="true">Gold</button>
-              <button class="chart-tab" type="button" data-metal="silver" aria-pressed="false">Silver</button>
-            </div>
-          </div>
-          <div class="chart-summary tradingview-summary">
-            <strong id="chartSymbol">OANDA:XAUUSD</strong>
-            <span>International spot reference · USD per troy ounce</span>
-          </div>
-          <div class="chart-container tradingview-container">
-            <div id="tradingviewChart" aria-label="TradingView international gold and silver chart">
-              <div class="tradingview-loading">Loading TradingView chart…</div>
-            </div>
-          </div>
-          <div class="chart-footer">
-            <span>DATA SOURCE: TRADINGVIEW / OANDA</span>
-            <span>NOT NEPAL RETAIL RATES</span>
-          </div>
-          <p class="chart-disclaimer">This chart follows an international USD spot-market symbol, not Nepal's official per-tola rate. Data availability and timing depend on the selected provider and market session. Check the symbol and status shown in the TradingView chart.</p>
-        </div>
-
-        <aside class="market-aside">
-          <p class="eyebrow">REGIONAL OVERVIEW</p>
-          <h3>Across <em>Nepal</em></h3>
-          <p class="muted-copy">Sample reference rates across selected cities. Local prices may vary.</p>
-          <div class="regional-list" id="regionalGrid"></div>
-        </aside>
-      </div>
-    </section>
-
-    <section class="articles-section section-wrap" id="articles">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">THE JOURNAL</p>
-          <h2>Stories & <em>perspective</em></h2>
-        </div>
-        <p class="section-aside">Notes on precious metals,<br>buying and the market</p>
-      </div>
-
-      <div class="article-tools">
-        <label class="search-box">
-          <span>⌕</span>
-          <input type="search" id="articleSearch" placeholder="Search the journal..." aria-label="Search articles">
-        </label>
-        <select id="categoryFilter" aria-label="Filter articles by category">
-          <option value="All">All topics</option>
-          <option value="Gold">Gold</option>
-          <option value="Silver">Silver</option>
-          <option value="Guides">Guides</option>
-          <option value="Market">Market insight</option>
-        </select>
-      </div>
-
-      <div class="featured-article" id="featuredArticle"></div>
-      <div class="article-grid" id="articleGrid"></div>
-      <p class="article-empty" id="articleEmpty" hidden>No stories match your search. Try another keyword or topic.</p>
-    </section>
-
-    <section class="tools-section section-wrap" id="tools">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">USEFUL EVERYDAY TOOLS</p>
-          <h2>Make the <em>calculation</em></h2>
-        </div>
-        <p class="section-aside">Simple tools for understanding<br>weight and estimated value</p>
-      </div>
-
-      <div class="tools-grid">
-        <article class="tool-card">
-          <span class="tool-index">01 / VALUE ESTIMATOR</span>
-          <h3>Gold & silver <em>calculator</em></h3>
-          <p class="muted-copy">Estimate the metal value by weight and purity. Making charges and taxes are not included.</p>
-          <label for="metalType">Metal</label>
-          <select id="metalType">
-            <option value="gold">Gold</option>
-            <option value="silver">Silver</option>
-          </select>
-          <div class="form-row">
-            <div>
-              <label for="weight">Weight (grams)</label>
-              <input type="number" id="weight" min="0" step="0.01" placeholder="e.g. 10">
-            </div>
-            <div>
-              <label for="purity">Purity (%)</label>
-              <select id="purity">
-                <option value="100">100%</option>
-                <option value="99.9">99.9%</option>
-                <option value="91.6" selected>91.6% (22K)</option>
-                <option value="75">75% (18K)</option>
-                <option value="58.5">58.5% (14K)</option>
-              </select>
-            </div>
-          </div>
-          <button class="button button-dark full-button" id="calculateBtn">Calculate estimate ↗</button>
-          <div class="tool-result" id="calcOutput" aria-live="polite">Your estimated value will appear here.</div>
-        </article>
-
-        <article class="tool-card converter-card">
-          <span class="tool-index">02 / WEIGHT CONVERTER</span>
-          <h3>Tola to <em>grams</em></h3>
-          <p class="muted-copy">Convert between the traditional tola measurement and grams.</p>
-          <label for="convertValue">Enter amount</label>
-          <input type="number" id="convertValue" min="0" step="any" placeholder="Enter weight">
-          <div class="form-row">
-            <div>
-              <label for="convertFrom">From</label>
-              <select id="convertFrom">
-                <option value="tola">Tola</option>
-                <option value="gram">Gram</option>
-              </select>
-            </div>
-            <div>
-              <label for="convertTo">To</label>
-              <select id="convertTo">
-                <option value="gram">Gram</option>
-                <option value="tola">Tola</option>
-              </select>
-            </div>
-          </div>
-          <button class="button button-outline full-button" id="convertBtn">Convert weight ↗</button>
-          <div class="tool-result" id="convertOutput" aria-live="polite">1 tola = 11.6638 grams.</div>
-        </article>
-      </div>
-    </section>
-
-    <section class="about-strip section-wrap" id="about">
-      <div class="about-mark">◆</div>
-      <div>
-        <p class="eyebrow">ABOUT THIS JOURNAL</p>
-        <h2>A clearer view of<br><em>precious metals.</em></h2>
-      </div>
-      <p class="about-description">Gold N Silver Rates is a place for daily rate information, useful explanations and market-related reading for people interested in gold and silver in Nepal.</p>
-      <a href="#footer" class="text-link">More about us <span>→</span></a>
-    </section>
-  </main>
-
-  <main id="articlePage" class="article-page" hidden>
-    <header class="article-header">
-      <div class="article-header-inner">
-        <button class="article-back" id="articleBack" aria-label="Back to articles">
-          <span>←</span>
-        </button>
-        <a class="brand" href="#home" id="articleBrand" aria-label="Gold N Silver Rates">
+        <a class="brand" href="#home" aria-label="Gold N Silver Rates home">
           <span class="brand-mark">◆</span>
           <span class="brand-copy">
             <strong>GOLD N SILVER</strong>
             <small>RATES · NEPAL</small>
           </span>
         </a>
-        <button class="icon-button theme-button" id="articleThemeToggle" aria-label="Switch theme">
-          <span id="articleThemeIcon">☾</span>
-        </button>
+
+        <nav class="desktop-nav" aria-label="Main navigation">
+          <a href="#home">Home</a>
+          <a href="#rates">Today's Rates</a>
+          <a href="#market">Market Watch</a>
+          <a href="#challenge">Challenge</a>
+          <a href="#articles">Articles</a>
+          <a href="#tools">Tools</a>
+        </nav>
+
+        <div class="header-actions">
+          <div class="notification-wrap">
+            <button class="icon-button notification-button" id="notificationBell" type="button" aria-label="Daily quiz notifications" aria-expanded="false" title="Daily quiz reminder">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4" /></svg>
+              <span class="notification-dot" id="notificationDot" aria-hidden="true"></span>
+            </button>
+            <div class="notification-panel" id="notificationPanel" hidden>
+              <p class="notification-panel-kicker">DAILY CHALLENGE</p>
+              <strong id="notificationText">Your daily question is ready.</strong>
+              <button type="button" id="notificationGoToQuiz">Go to today’s quiz ↗</button>
+            </div>
+          </div>
+          <div class="account-menu-wrap">
+            <button class="account-button" id="accountButton" type="button" aria-haspopup="true" aria-expanded="false">
+              <span id="accountButtonLabel">Sign in</span>
+              <span aria-hidden="true">⌄</span>
+            </button>
+            <div class="account-menu" id="accountMenu" hidden>
+              <p id="accountMenuEmail">Signed in</p>
+              <button type="button" id="signOutButton">Sign out</button>
+            </div>
+          </div>
+          <button
+            class="icon-button theme-button"
+            id="themeToggle"
+            aria-label="Switch theme"
+          >
+            <span id="themeIcon">☾</span>
+          </button>
+
+          <a class="header-cta" href="#rates"> Explore Rates <span>↗</span> </a>
+        </div>
       </div>
     </header>
 
-    <article class="reading-article">
-      <div class="reading-topline">
-        <span id="readingCategory">MARKET INSIGHT</span>
-        <span id="readingDate"></span>
-      </div>
-      <h1 id="readingTitle"></h1>
-      <p class="reading-deck" id="readingDeck"></p>
-      <div class="reading-meta">
-        <span>GOLD N SILVER EDITORIAL</span>
-        <span id="readingTime">5 MIN READ</span>
-      </div>
-      <div class="reading-cover" id="readingCover">
-        <span class="cover-symbol">Au</span>
-        <span class="cover-caption">THE PRECIOUS METALS JOURNAL · NEPAL</span>
-      </div>
-      <div class="reading-body" id="readingBody"></div>
-      <div class="reading-end">
-        <span>END OF ARTICLE</span>
-        <span>◆</span>
-      </div>
-      <button class="button button-outline reading-back-bottom" id="articleBackBottom">← Back to articles</button>
-    </article>
-  </main>
+    <div class="daily-quiz-notice" id="dailyQuizNotice" role="status" hidden>
+      <span class="daily-quiz-notice-icon">✦</span>
+      <p id="dailyQuizNoticeText">Today’s quiz is ready.</p>
+      <button type="button" id="closeDailyQuizNotice" aria-label="Dismiss reminder">×</button>
+    </div>
 
-  <footer class="site-footer" id="footer">
-    <div class="footer-main section-wrap">
-      <div class="footer-brand">
+    <!-- MOBILE SIDEBAR -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <aside class="sidebar" id="sidebar" aria-label="Mobile navigation">
+      <div class="sidebar-top">
         <a class="brand" href="#home">
           <span class="brand-mark">◆</span>
           <span class="brand-copy">
@@ -367,37 +133,1017 @@
             <small>RATES · NEPAL</small>
           </span>
         </a>
-        <p>A considered view of gold, silver and the market in Nepal.</p>
-      </div>
-      <div class="footer-column">
-        <span class="footer-heading">EXPLORE</span>
-        <a href="#rates">Today's rates</a>
-        <a href="#market">Market watch</a>
-        <a href="#articles">Journal</a>
-        <a href="#tools">Calculators</a>
-      </div>
-      <div class="footer-column">
-        <span class="footer-heading">INFORMATION</span>
-        <a href="#about">About us</a>
-        <button data-info="contact">Contact</button>
-        <button data-info="privacy">Privacy policy</button>
-        <button data-info="disclaimer">Disclaimer</button>
-      </div>
-    </div>
-    <div class="footer-bottom section-wrap">
-      <span>© <span id="year"></span> GOLD N SILVER RATES · NEPAL</span>
-      <span>INFORMATIONAL CONTENT · VERIFY RATES BEFORE PURCHASE</span>
-    </div>
-  </footer>
 
-  <div class="info-modal" id="infoModal" aria-hidden="true">
-    <div class="info-modal-panel" role="dialog" aria-modal="true" aria-labelledby="infoModalTitle">
-      <button class="modal-close" id="infoModalClose" aria-label="Close">×</button>
-      <p class="eyebrow">GOLD N SILVER RATES</p>
-      <h2 id="infoModalTitle"></h2>
-      <p id="infoModalText"></p>
-    </div>
-  </div>
+        <button
+          class="icon-button"
+          id="closeSidebar"
+          aria-label="Close navigation"
+        >
+          ×
+        </button>
+      </div>
 
-</body>
+      <p class="sidebar-caption">NAVIGATION</p>
+
+      <nav class="sidebar-nav">
+        <a href="#home">01 <span>Home</span></a>
+        <a href="#rates">02 <span>Today's Rates</span></a>
+        <a href="#market">03 <span>Market Watch</span></a>
+        <a href="#challenge">04 <span>Gold N Silver Challenge</span></a>
+        <a href="#articles">05 <span>Articles & Guides</span></a>
+        <a href="#tools">06 <span>Calculators</span></a>
+        <a href="#about">07 <span>About</span></a>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <span>GOLD N SILVER RATES</span>
+        <small>Independent market information · Nepal</small>
+      </div>
+    </aside>
+
+    <!-- MAIN WEBSITE -->
+    <main id="home">
+      <!-- HERO -->
+      <section class="hero section-wrap">
+        <div class="hero-kicker"><span></span> PRECIOUS METALS · NEPAL</div>
+
+        <div class="hero-grid">
+          <div class="hero-main">
+            <p class="eyebrow">THE DAILY MARKET EDITION</p>
+
+            <h1>
+              Know the value.<br />
+              <em>Read between the lines.</em>
+            </h1>
+
+            <p class="hero-description">
+              Gold and silver rates, market movements and informed perspectives
+              from Nepal. Follow the numbers, understand the trends and stay up
+              to date with the precious metals market.
+            </p>
+
+            <div class="hero-links">
+              <a class="button button-dark" href="#rates">
+                View today's rates <span>↗</span>
+              </a>
+
+              <a class="text-link" href="#articles">
+                Read market stories <span>→</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="hero-side">
+            <div class="hero-note">
+              <span class="note-number">01</span>
+              <span class="note-rule"></span>
+              <p>
+                MARKET INFORMATION<br />
+                FOR EVERYDAY DECISIONS
+              </p>
+            </div>
+
+            <div class="hero-ornament" aria-hidden="true">
+              <span class="ornament-ring ring-one"></span>
+              <span class="ornament-ring ring-two"></span>
+              <span class="ornament-center">Au</span>
+              <span class="ornament-caption">EST. NEPAL</span>
+            </div>
+
+            <p class="hero-date">
+              EDITION DATE <strong id="heroDate"></strong>
+            </p>
+          </div>
+        </div>
+
+        <div class="hero-bottomline">
+          <span>GOLD · SILVER · MARKET INSIGHT</span>
+          <span>SCROLL TO EXPLORE ↓</span>
+        </div>
+      </section>
+
+      <!-- TODAY'S RATES -->
+      <section class="rates-section section-wrap" id="rates">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">THE NUMBERS TODAY</p>
+            <h2>Today's <em>rates</em></h2>
+          </div>
+
+          <p class="section-aside">
+            Indicative sample prices<br />
+            Per tola · Nepalese Rupees
+          </p>
+        </div>
+
+        <div class="rate-grid">
+          <article class="rate-card gold-card">
+            <div class="rate-card-top">
+              <span class="metal-symbol">Au</span>
+              <span class="rate-tag">FINE GOLD · 24K</span>
+              <span class="rate-date" id="goldDate"></span>
+            </div>
+
+            <p class="metal-name">Fine Gold</p>
+
+            <div class="rate-value" id="goldRate">Rs. 245,000</div>
+
+            <div class="rate-card-bottom">
+              <span class="rate-unit">PER TOLA</span>
+              <span class="rate-change positive" id="goldChange">
+                ▲ Rs. 1,200
+              </span>
+            </div>
+
+            <div class="rate-card-line"></div>
+
+            <p class="rate-footnote">
+              Sample reference price · Verify before purchase
+            </p>
+          </article>
+
+          <article class="rate-card silver-card">
+            <div class="rate-card-top">
+              <span class="metal-symbol silver-symbol">Ag</span>
+              <span class="rate-tag">FINE SILVER</span>
+              <span class="rate-date" id="silverDate"></span>
+            </div>
+
+            <p class="metal-name">Silver</p>
+
+            <div class="rate-value" id="silverRate">Rs. 3,250</div>
+
+            <div class="rate-card-bottom">
+              <span class="rate-unit">PER TOLA</span>
+              <span class="rate-change positive" id="silverChange">
+                ▲ Rs. 45
+              </span>
+            </div>
+
+            <div class="rate-card-line"></div>
+
+            <p class="rate-footnote">
+              Sample reference price · Verify before purchase
+            </p>
+          </article>
+        </div>
+
+        <p class="rate-disclaimer">
+          These are demonstration figures for the frontend preview. They are not
+          official or current market quotations.
+        </p>
+      </section>
+
+      <!-- MARKET WATCH -->
+      <section class="market-section section-wrap" id="market">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">A CLOSER LOOK</p>
+            <h2>Market <em>watch</em></h2>
+          </div>
+
+          <p class="section-aside">
+            A sample view of recent<br />
+            price movement
+          </p>
+        </div>
+
+        <div class="market-layout">
+          <div class="chart-panel">
+            <div class="chart-heading">
+              <div>
+                <span class="panel-label">
+                  INTERNATIONAL MARKET · TRADINGVIEW
+                </span>
+                <h3 id="chartTitle">Gold spot / US Dollar</h3>
+              </div>
+
+              <div
+                class="chart-tabs"
+                role="group"
+                aria-label="Choose international metal chart"
+              >
+                <button
+                  class="chart-tab active"
+                  type="button"
+                  data-metal="gold"
+                  aria-pressed="true"
+                >
+                  Gold
+                </button>
+
+                <button
+                  class="chart-tab"
+                  type="button"
+                  data-metal="silver"
+                  aria-pressed="false"
+                >
+                  Silver
+                </button>
+              </div>
+            </div>
+
+            <div class="chart-summary tradingview-summary">
+              <div>
+                <strong id="chartSymbol">OANDA:XAUUSD</strong>
+                <span> International spot market · USD per troy ounce </span>
+              </div>
+
+              <span class="chart-market-badge">INTERNATIONAL</span>
+            </div>
+
+            <div class="chart-container tradingview-container">
+              <div
+                id="tradingviewChart"
+                aria-label="TradingView international gold and silver chart"
+              >
+                <div class="tradingview-loading">
+                  Loading TradingView chart…
+                </div>
+              </div>
+            </div>
+
+            <div class="chart-footer">
+              <span>DATA SOURCE: TRADINGVIEW / OANDA</span>
+              <span>NOT NEPAL RETAIL RATES</span>
+            </div>
+
+            <p class="chart-disclaimer">
+              This chart follows an international USD spot-market symbol, not
+              Nepal's official per-tola rate. Data availability and timing
+              depend on the selected provider and market session. Check the
+              symbol and status shown in the TradingView chart.
+            </p>
+          </div>
+
+          <aside class="market-aside">
+            <p class="eyebrow">REGIONAL OVERVIEW</p>
+            <h3>Across <em>Nepal</em></h3>
+
+            <p class="muted-copy">
+              Sample reference rates across selected cities. Local prices may
+              vary.
+            </p>
+
+            <div class="regional-list" id="regionalGrid"></div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- GOLD N SILVER CHALLENGE -->
+      <section class="challenge-section section-wrap" id="challenge">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">LEARN · PREDICT · EARN BADGES</p>
+            <h2>The Gold N Silver <em>Challenge</em></h2>
+          </div>
+
+          <p class="section-aside">
+            Test your market knowledge<br />
+            One new challenge every day
+          </p>
+        </div>
+
+        <div class="challenge-intro">
+          <div>
+            <span class="challenge-label">YOUR DAILY MARKET QUIZ</span>
+            <h3>How well do you know <em>gold and silver?</em></h3>
+            <p>
+              Take a quick daily quiz, build your streak and learn something new
+              about precious metals. You can play without creating an account.
+            </p>
+          </div>
+
+          <div class="challenge-symbol" aria-hidden="true">
+            <span>Au</span>
+            <small>Ag</small>
+          </div>
+        </div>
+
+        <div class="quiz-layout">
+          <div class="quiz-card" id="dailyQuiz">
+            <div class="quiz-card-header">
+              <div>
+                <span class="quiz-eyebrow">QUESTION OF THE DAY</span>
+                <p class="quiz-date" id="quizDate">DAILY CHALLENGE</p>
+              </div>
+              <div class="quiz-header-stats">
+                <span class="quiz-difficulty">ONE QUESTION DAILY</span>
+                <span class="quiz-points-display">
+                  ✦ <strong id="quizPoints">0</strong> POINTS
+                </span>
+              </div>
+            </div>
+
+            <div class="quiz-content">
+              <p class="quiz-question-number" id="quizQuestionNumber">
+                QUESTION 01
+              </p>
+
+              <h3 id="quizQuestion">Loading today's question…</h3>
+
+              <div class="quiz-options" id="quizOptions">
+                <!-- Options are inserted by quiz.js -->
+              </div>
+
+              <div class="quiz-actions">
+                <button
+                  class="button button-dark full-button"
+                  id="quizSubmit"
+                  type="button"
+                  disabled
+                >
+                  Submit answer ↗
+                </button>
+                <button class="quiz-quit-button" id="quizQuit" type="button">Quit quiz</button>
+              </div>
+
+              <div
+                class="quiz-feedback"
+                id="quizFeedback"
+                aria-live="polite"
+                hidden
+              ></div>
+            </div>
+
+            <div class="quiz-card-footer">
+              <span>GOLD N SILVER DAILY CHALLENGE</span>
+              <span>NO ENTRY FEE · JUST FOR FUN</span>
+            </div>
+          </div>
+
+          <aside class="quiz-side">
+            <div class="streak-card">
+              <span class="streak-icon">✦</span>
+              <p class="quiz-eyebrow">YOUR DAILY STREAK</p>
+              <div class="streak-number">
+                <strong id="quizStreak">0</strong>
+                <span>days</span>
+              </div>
+              <p>Play every day to keep your streak going.</p>
+            </div>
+
+            <div class="quiz-benefits">
+              <p class="quiz-eyebrow">WHY PLAY?</p>
+
+              <div class="quiz-benefit">
+                <span>01</span>
+                <div>
+                  <strong>Build your knowledge</strong>
+                  <p>Learn useful facts about precious metals.</p>
+                </div>
+              </div>
+
+              <div class="quiz-benefit">
+                <span>02</span>
+                <div>
+                  <strong>Collect achievements</strong>
+                  <p>Unlock badges as you complete challenges.</p>
+                </div>
+              </div>
+
+              <div class="quiz-benefit">
+                <span>03</span>
+                <div>
+                  <strong>Keep your streak</strong>
+                  <p>Create an account to save your progress.</p>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
+
+        <div class="quiz-login-prompt" id="quizLoginPrompt" hidden>
+          <div>
+            <p class="eyebrow">DON'T LOSE YOUR PROGRESS</p>
+            <h3>Your next challenge starts tomorrow.</h3>
+            <p>
+              Create a free account to save your streak, collect badges and
+              track your quiz progress.
+            </p>
+          </div>
+
+          <a href="#" class="button button-dark" id="quizRegisterButton">
+            Create free account ↗
+          </a>
+        </div>
+
+        <!-- MARKET PREDICTION CHALLENGE -->
+        <div class="prediction-section">
+          <div class="challenge-subheading">
+            <div>
+              <p class="eyebrow">THE MARKET CALL</p>
+              <h3>Higher or <em>lower?</em></h3>
+              <p>Make your call on the next market movement.</p>
+            </div>
+            <span class="preview-tag">INTERACTIVE PREVIEW</span>
+          </div>
+
+          <div class="prediction-grid">
+            <!-- GOLD -->
+            <article class="prediction-card">
+              <div class="prediction-card-top">
+                <span class="prediction-metal gold-metal">Au</span>
+                <div>
+                  <span class="prediction-label">GOLD MARKET</span>
+                  <h4>Gold / USD</h4>
+                </div>
+                <span class="prediction-status">PREVIEW</span>
+              </div>
+
+              <div class="prediction-price">
+                <span>Current provider price</span>
+                <strong>Awaiting connection</strong>
+                <small
+                  >Live price will appear when a data provider is
+                  connected.</small
+                >
+              </div>
+
+              <p class="prediction-question">
+                Where do you think gold will move?
+              </p>
+
+              <div class="prediction-choices">
+                <button type="button" data-metal="gold" data-choice="higher">
+                  <span>↗</span>
+                  Higher
+                </button>
+                <button type="button" data-metal="gold" data-choice="lower">
+                  <span>↘</span>
+                  Lower
+                </button>
+              </div>
+
+              <button
+                class="prediction-submit"
+                type="button"
+                data-submit-prediction="gold"
+                disabled
+              >
+                Sign in to make your prediction ↗
+              </button>
+              <p class="prediction-note" id="goldPredictionMessage">
+                Account required · No entry fee · For learning and entertainment
+              </p>
+            </article>
+
+            <!-- SILVER -->
+            <article class="prediction-card">
+              <div class="prediction-card-top">
+                <span class="prediction-metal silver-metal">Ag</span>
+                <div>
+                  <span class="prediction-label">SILVER MARKET</span>
+                  <h4>Silver / USD</h4>
+                </div>
+                <span class="prediction-status">PREVIEW</span>
+              </div>
+
+              <div class="prediction-price">
+                <span>Current provider price</span>
+                <strong>Awaiting connection</strong>
+                <small
+                  >Live price will appear when a data provider is
+                  connected.</small
+                >
+              </div>
+
+              <p class="prediction-question">
+                Where do you think silver will move?
+              </p>
+
+              <div class="prediction-choices">
+                <button type="button" data-metal="silver" data-choice="higher">
+                  <span>↗</span>
+                  Higher
+                </button>
+                <button type="button" data-metal="silver" data-choice="lower">
+                  <span>↘</span>
+                  Lower
+                </button>
+              </div>
+
+              <button
+                class="prediction-submit"
+                type="button"
+                data-submit-prediction="silver"
+                disabled
+              >
+                Sign in to make your prediction ↗
+              </button>
+              <p class="prediction-note" id="silverPredictionMessage">
+                Account required · No entry fee · For learning and entertainment
+              </p>
+            </article>
+          </div>
+
+          <p class="prediction-disclaimer">
+            This is an educational market prediction game, not financial advice
+            or a financial betting product. Provider prices and prediction
+            rounds are not connected in this preview.
+          </p>
+        </div>
+
+        <!-- LEADERBOARD AND ACHIEVEMENTS -->
+        <div class="community-section">
+          <div class="challenge-subheading">
+            <div>
+              <p class="eyebrow">THE COMMUNITY</p>
+              <h3>Play, learn & <em>rise.</em></h3>
+              <p>Recognising consistency and market knowledge.</p>
+            </div>
+            <span class="preview-tag">LIVE RANKINGS</span>
+          </div>
+
+          <div class="community-grid">
+            <article class="leaderboard-card">
+              <div class="community-card-heading">
+                <div>
+                  <p class="quiz-eyebrow">TOP QUIZ PLAYERS</p>
+                  <h4>Leaderboard</h4>
+                </div>
+                <span>✦</span>
+              </div>
+
+              <div class="leaderboard-tabs">
+                <button class="active" type="button" data-leaderboard="monthly">
+                  Monthly
+                </button>
+                <button type="button" data-leaderboard="alltime">
+                  All time
+                </button>
+              </div>
+
+              <div class="leaderboard-list" id="leaderboardList"></div>
+
+              <p class="leaderboard-footnote" id="leaderboardFootnote">
+                Only members who opt in to public rankings are shown.
+              </p>
+            </article>
+
+            <article class="achievement-card">
+              <div class="community-card-heading">
+                <div>
+                  <p class="quiz-eyebrow">YOUR COLLECTION</p>
+                  <h4>Achievements</h4>
+                </div>
+                <span>◇</span>
+              </div>
+
+              <div class="achievement-list">
+                <div class="achievement-item" data-badge="streak7">
+                  <span class="achievement-icon">🔥</span>
+                  <div>
+                    <strong>7-Day Streak</strong>
+                    <small>Complete seven consecutive daily quizzes</small>
+                  </div>
+                  <span class="achievement-state">LOCKED</span>
+                </div>
+
+                <div class="achievement-item" data-badge="streak30">
+                  <span class="achievement-icon">🏆</span>
+                  <div>
+                    <strong>30-Day Streak</strong>
+                    <small>Complete thirty consecutive daily quizzes</small>
+                  </div>
+                  <span class="achievement-state">LOCKED</span>
+                </div>
+
+                <div class="achievement-item" data-badge="correct100">
+                  <span class="achievement-icon">💯</span>
+                  <div>
+                    <strong>Century Club</strong>
+                    <small>Answer 100 daily questions correctly</small>
+                  </div>
+                  <span class="achievement-state">LOCKED</span>
+                </div>
+              </div>
+
+              <p class="leaderboard-footnote" id="achievementFootnote">
+                Your account badges are awarded by the quiz database.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ARTICLES -->
+      <section class="articles-section section-wrap" id="articles">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">THE JOURNAL</p>
+            <h2>Stories & <em>perspective</em></h2>
+          </div>
+
+          <p class="section-aside">
+            Notes on precious metals,<br />
+            buying and the market
+          </p>
+        </div>
+
+        <div class="article-tools">
+          <label class="search-box">
+            <span>⌕</span>
+            <input
+              type="search"
+              id="articleSearch"
+              placeholder="Search the journal..."
+              aria-label="Search articles"
+            />
+          </label>
+
+          <select id="categoryFilter" aria-label="Filter articles by category">
+            <option value="All">All topics</option>
+            <option value="Gold">Gold</option>
+            <option value="Silver">Silver</option>
+            <option value="Guides">Guides</option>
+            <option value="Market">Market insight</option>
+          </select>
+        </div>
+
+        <div class="featured-article" id="featuredArticle"></div>
+        <div class="article-grid" id="articleGrid"></div>
+
+        <p class="article-empty" id="articleEmpty" hidden>
+          No stories match your search. Try another keyword or topic.
+        </p>
+      </section>
+
+      <!-- CALCULATORS AND CONVERTER -->
+      <section class="tools-section section-wrap" id="tools">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">USEFUL EVERYDAY TOOLS</p>
+            <h2>Make the <em>calculation</em></h2>
+          </div>
+
+          <p class="section-aside">
+            Simple tools for understanding<br />
+            weight and estimated value
+          </p>
+        </div>
+
+        <div class="tools-grid">
+          <article class="tool-card">
+            <span class="tool-index">01 / VALUE ESTIMATOR</span>
+            <h3>Gold & silver <em>calculator</em></h3>
+
+            <p class="muted-copy">
+              Estimate the metal value by weight and purity. Making charges and
+              taxes are not included.
+            </p>
+
+            <label for="metalType">Metal</label>
+            <select id="metalType">
+              <option value="gold">Gold</option>
+              <option value="silver">Silver</option>
+            </select>
+
+            <div class="form-row">
+              <div>
+                <label for="weight">Weight (grams)</label>
+                <input
+                  type="number"
+                  id="weight"
+                  min="0"
+                  step="0.01"
+                  placeholder="e.g. 10"
+                />
+              </div>
+
+              <div>
+                <label for="purity">Purity (%)</label>
+                <select id="purity">
+                  <option value="100">100%</option>
+                  <option value="99.9">99.9%</option>
+                  <option value="91.6" selected>91.6% (22K)</option>
+                  <option value="75">75% (18K)</option>
+                  <option value="58.5">58.5% (14K)</option>
+                </select>
+              </div>
+            </div>
+
+            <button class="button button-dark full-button" id="calculateBtn">
+              Calculate estimate ↗
+            </button>
+
+            <div class="tool-result" id="calcOutput" aria-live="polite">
+              Your estimated value will appear here.
+            </div>
+          </article>
+
+          <article class="tool-card converter-card">
+            <span class="tool-index">02 / WEIGHT CONVERTER</span>
+            <h3>Tola to <em>grams</em></h3>
+
+            <p class="muted-copy">
+              Convert between the traditional tola measurement and grams.
+            </p>
+
+            <label for="convertValue">Enter amount</label>
+            <input
+              type="number"
+              id="convertValue"
+              min="0"
+              step="any"
+              placeholder="Enter weight"
+            />
+
+            <div class="form-row">
+              <div>
+                <label for="convertFrom">From</label>
+                <select id="convertFrom">
+                  <option value="tola">Tola</option>
+                  <option value="gram">Gram</option>
+                </select>
+              </div>
+
+              <div>
+                <label for="convertTo">To</label>
+                <select id="convertTo">
+                  <option value="gram">Gram</option>
+                  <option value="tola">Tola</option>
+                </select>
+              </div>
+            </div>
+
+            <button class="button button-outline full-button" id="convertBtn">
+              Convert weight ↗
+            </button>
+
+            <div class="tool-result" id="convertOutput" aria-live="polite">
+              1 tola = 11.6638 grams.
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ABOUT -->
+      <section class="about-strip section-wrap" id="about">
+        <div class="about-mark">◆</div>
+
+        <div>
+          <p class="eyebrow">ABOUT THIS JOURNAL</p>
+          <h2>
+            A clearer view of<br />
+            <em>precious metals.</em>
+          </h2>
+        </div>
+
+        <p class="about-description">
+          Gold N Silver Rates is a place for daily rate information, useful
+          explanations and market-related reading for people interested in gold
+          and silver in Nepal.
+        </p>
+
+        <a href="#footer" class="text-link"> More about us <span>→</span> </a>
+      </section>
+    </main>
+
+    <!-- ARTICLE READER PAGE -->
+    <main id="articlePage" class="article-page" hidden>
+      <header class="article-header">
+        <div class="article-header-inner">
+          <button
+            class="article-back"
+            id="articleBack"
+            aria-label="Back to articles"
+          >
+            <span>←</span>
+          </button>
+
+          <a
+            class="brand"
+            href="#home"
+            id="articleBrand"
+            aria-label="Gold N Silver Rates"
+          >
+            <span class="brand-mark">◆</span>
+            <span class="brand-copy">
+              <strong>GOLD N SILVER</strong>
+              <small>RATES · NEPAL</small>
+            </span>
+          </a>
+
+          <button
+            class="icon-button theme-button"
+            id="articleThemeToggle"
+            aria-label="Switch theme"
+          >
+            <span id="articleThemeIcon">☾</span>
+          </button>
+        </div>
+      </header>
+
+      <article class="reading-article">
+        <div class="reading-topline">
+          <span id="readingCategory">MARKET INSIGHT</span>
+          <span id="readingDate"></span>
+        </div>
+
+        <h1 id="readingTitle"></h1>
+        <p class="reading-deck" id="readingDeck"></p>
+
+        <div class="reading-meta">
+          <span>GOLD N SILVER EDITORIAL</span>
+          <span id="readingTime">5 MIN READ</span>
+        </div>
+
+        <div class="reading-cover" id="readingCover">
+          <span class="cover-symbol">Au</span>
+          <span class="cover-caption">
+            THE PRECIOUS METALS JOURNAL · NEPAL
+          </span>
+        </div>
+
+        <div class="reading-body" id="readingBody"></div>
+
+        <div class="reading-end">
+          <span>END OF ARTICLE</span>
+          <span>◆</span>
+        </div>
+
+        <button
+          class="button button-outline reading-back-bottom"
+          id="articleBackBottom"
+        >
+          ← Back to articles
+        </button>
+      </article>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="site-footer" id="footer">
+      <div class="footer-main section-wrap">
+        <div class="footer-brand">
+          <a class="brand" href="#home">
+            <span class="brand-mark">◆</span>
+            <span class="brand-copy">
+              <strong>GOLD N SILVER</strong>
+              <small>RATES · NEPAL</small>
+            </span>
+          </a>
+
+          <p>A considered view of gold, silver and the market in Nepal.</p>
+        </div>
+
+        <div class="footer-column">
+          <span class="footer-heading">EXPLORE</span>
+          <a href="#rates">Today's rates</a>
+          <a href="#market">Market watch</a>
+          <a href="#challenge">Daily challenge</a>
+          <a href="#articles">Journal</a>
+          <a href="#tools">Calculators</a>
+        </div>
+
+        <div class="footer-column">
+          <span class="footer-heading">INFORMATION</span>
+          <a href="#about">About us</a>
+          <button data-info="contact">Contact</button>
+          <button data-info="privacy">Privacy policy</button>
+          <button data-info="disclaimer">Disclaimer</button>
+        </div>
+      </div>
+
+      <div class="footer-bottom section-wrap">
+        <span> © <span id="year"></span> GOLD N SILVER RATES · NEPAL </span>
+
+        <span> INFORMATIONAL CONTENT · VERIFY RATES BEFORE PURCHASE </span>
+      </div>
+    </footer>
+
+    <!-- INFORMATION MODAL -->
+    <div class="info-modal" id="infoModal" aria-hidden="true">
+      <div
+        class="info-modal-panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="infoModalTitle"
+      >
+        <button class="modal-close" id="infoModalClose" aria-label="Close">
+          ×
+        </button>
+
+        <p class="eyebrow">GOLD N SILVER RATES</p>
+        <h2 id="infoModalTitle"></h2>
+        <p id="infoModalText"></p>
+      </div>
+    </div>
+
+    <!-- ACCOUNT AUTHENTICATION MODAL -->
+    <div class="auth-overlay" id="authModal" aria-hidden="true" hidden>
+      <section
+        class="auth-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="authTitle"
+      >
+        <button
+          class="auth-close"
+          id="authClose"
+          type="button"
+          aria-label="Close account window"
+        >
+          ×
+        </button>
+
+        <div class="auth-brand-mark">◆</div>
+
+        <p class="eyebrow">GOLD N SILVER RATES · MEMBERS</p>
+        <h2 id="authTitle">Welcome <em>back.</em></h2>
+
+        <p class="auth-description" id="authDescription">
+          Sign in to save your quiz progress, collect badges and join the
+          community.
+        </p>
+
+        <div class="auth-tabs" id="authTabs">
+          <button type="button" class="active" data-auth-mode="login">
+            Sign in
+          </button>
+          <button type="button" data-auth-mode="register">
+            Create account
+          </button>
+        </div>
+
+        <form id="authForm">
+          <div class="auth-field" id="authNameField" hidden>
+            <label for="authName">Display name</label>
+            <input
+              id="authName"
+              type="text"
+              autocomplete="name"
+              placeholder="Your name"
+              maxlength="60"
+            />
+          </div>
+
+          <div class="auth-field">
+            <label for="authEmail">Email address</label>
+            <input
+              id="authEmail"
+              type="email"
+              autocomplete="email"
+              placeholder="you@example.com"
+              required
+            />
+          </div>
+
+          <div class="auth-field" id="authPasswordField">
+            <label for="authPassword">Password</label>
+            <div class="auth-password-wrap">
+              <input
+                id="authPassword"
+                type="password"
+                autocomplete="current-password"
+                placeholder="At least 8 characters"
+                minlength="8"
+                required
+              />
+              <button class="password-visibility" type="button" data-toggle-password="authPassword" aria-label="Show password" aria-pressed="false">Show</button>
+            </div>
+          </div>
+
+          <div class="auth-field" id="authConfirmPasswordField" hidden>
+            <label for="authConfirmPassword">Confirm password</label>
+            <div class="auth-password-wrap">
+              <input
+                id="authConfirmPassword"
+                type="password"
+                autocomplete="new-password"
+                placeholder="Enter your password again"
+                minlength="8"
+              />
+              <button class="password-visibility" type="button" data-toggle-password="authConfirmPassword" aria-label="Show confirm password" aria-pressed="false">Show</button>
+            </div>
+          </div>
+
+          <button class="auth-forgot" id="authForgot" type="button">
+            Forgot password?
+          </button>
+
+          <button
+            class="button button-dark full-button auth-submit"
+            id="authSubmit"
+            type="submit"
+          >
+            Sign in ↗
+          </button>
+        </form>
+
+        <p
+          class="auth-message"
+          id="authMessage"
+          role="status"
+          aria-live="polite"
+        ></p>
+
+        <p class="auth-legal">
+          By creating an account, you agree to use the challenge for educational
+          and entertainment purposes.
+        </p>
+      </section>
+    </div>
+    <!-- END ACCOUNT AUTHENTICATION MODAL -->
+  </body>
 </html>

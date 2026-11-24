@@ -1,3 +1,26 @@
-.dist/
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Build output
+dist/
+build/
+
+# Local development and deployment
+.vercel/
 .DS_Store
 Thumbs.db
+
+# Supabase local temporary files
+supabase/.temp/
+
+# Project backup archives
+*.zip
+
+# Legacy backend (not currently used)
+backend/
