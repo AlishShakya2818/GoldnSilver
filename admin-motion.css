@@ -1,0 +1,67 @@
+/* =========================================================
+   admin-motion.css — Gold N Silver Rates admin dashboard
+   Load AFTER admin.css. CSS only; remove the <link> to switch off.
+   Uses "backwards" fill so hover/active transforms keep working.
+   ========================================================= */
+
+:root { --am-ease: cubic-bezier(.22, .61, .36, 1); }
+
+@keyframes amFade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes amRise {
+  from { opacity: 0; transform: translate3d(0, 12px, 0); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Interaction polish (works for everyone) */
+.admin-stat-card, .admin-panel {
+  transition: transform .35s var(--am-ease), box-shadow .35s var(--am-ease), border-color .3s ease;
+}
+.admin-primary-button, .admin-secondary-button {
+  transition:
+    transform .25s var(--am-ease), box-shadow .25s var(--am-ease),
+    background-color .25s ease, border-color .25s ease, color .25s ease;
+}
+.admin-nav-link { transition: background-color .25s ease, color .25s ease, box-shadow .35s var(--am-ease), translate .3s var(--am-ease); }
+
+@media (hover: hover) and (pointer: fine) {
+  .admin-stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 18px 34px -22px rgba(0, 0, 0, .5), inset 0 2px 0 var(--a-gold);
+  }
+  .admin-primary-button:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 22px -12px var(--a-gold);
+  }
+  .admin-secondary-button:hover:not(:disabled) { transform: translateY(-1px); }
+  .admin-nav-link:hover { translate: 2px 0; }
+}
+.admin-primary-button:active:not(:disabled),
+.admin-secondary-button:active:not(:disabled) { transform: scale(.98); }
+
+/* Entrances: replay each time you open a section */
+@media (prefers-reduced-motion: no-preference) {
+  .admin-view.active { animation: amFade .7s var(--am-ease) backwards; }
+  .admin-view.active .admin-stat-card,
+  .admin-view.active .admin-panel { animation: amRise .9s var(--am-ease) backwards; }
+  .admin-view.active .admin-stat-card:nth-child(2) { animation-delay: .07s; }
+  .admin-view.active .admin-stat-card:nth-child(3) { animation-delay: .14s; }
+  .admin-view.active .admin-stat-card:nth-child(4) { animation-delay: .21s; }
+  .admin-view.active .admin-stat-card:nth-child(n+5) { animation-delay: .28s; }
+  .admin-view.active .admin-panel { animation-delay: .2s; }
+
+  /* Imported Facebook posts: quick fade, first few staggered */
+  .facebook-post-card { animation: amFade .5s var(--am-ease) backwards; }
+  .facebook-post-card:nth-child(2) { animation-delay: .05s; }
+  .facebook-post-card:nth-child(3) { animation-delay: .1s; }
+  .facebook-post-card:nth-child(4) { animation-delay: .15s; }
+  .facebook-post-card:nth-child(n+5) { animation-delay: .2s; }
+}
+
+/* "Reduce motion" users: gentle fade only, no movement.
+   (Delete this block if you prefer no animation at all for them.) */
+@media (prefers-reduced-motion: reduce) {
+  html .admin-view.active,
+  html .admin-view.active .admin-stat-card,
+  html .admin-view.active .admin-panel,
+  html .facebook-post-card { animation: amFade .6s ease backwards !important; }
+}

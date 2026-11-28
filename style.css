@@ -3901,3 +3901,772 @@ body.auth-open {
         flex-direction: column;
     }
 }
+
+/* =========================================================
+   LIVE NEPAL PREDICTIONS, COMMUNITY COMMENTS & REFINEMENTS
+   ========================================================= */
+
+.tradingview-container {
+  height: 440px;
+  min-height: 390px;
+}
+
+#tradingviewChart,
+#tradingviewChart tv-advanced-chart {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 390px;
+}
+
+.tradingview-error {
+  display: grid;
+  min-height: 360px;
+  place-items: center;
+  padding: 24px;
+  color: var(--muted);
+  text-align: center;
+  font-size: 12px;
+}
+
+.tradingview-error a,
+.tradingview-loading a {
+  color: var(--gold);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.regional-reference-card {
+  display: grid;
+  gap: 10px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.regional-reference-card strong {
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 19px;
+  font-weight: 500;
+}
+
+.regional-reference-card p,
+.regional-reference-card small {
+  margin: 0;
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.7;
+}
+
+.prediction-status[data-status="open"] {
+  border-color: rgba(88, 139, 104, .45);
+  color: #588b68;
+}
+
+.prediction-status[data-status="settled"] {
+  border-color: rgba(177, 139, 67, .45);
+  color: var(--gold);
+}
+
+.prediction-comment-form {
+  display: grid;
+  gap: 9px;
+  margin-top: 17px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+
+.prediction-comment-form label {
+  color: var(--ink-soft);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.prediction-comment-form textarea {
+  width: 100%;
+  min-height: 82px;
+  resize: vertical;
+  padding: 11px 12px;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  background: var(--surface-alt);
+  color: var(--ink);
+  font: inherit;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.prediction-comment-form textarea:focus {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+.prediction-comment-submit {
+  min-height: 39px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink);
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .2s ease, border-color .2s ease;
+}
+
+.prediction-comment-submit:hover {
+  border-color: var(--gold);
+  background: var(--surface-alt);
+}
+
+.prediction-comment-form small {
+  color: var(--muted);
+  font-size: 9px;
+  line-height: 1.6;
+}
+
+.prediction-community {
+  margin-top: 25px;
+  padding: 22px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.prediction-community .community-card-heading {
+  margin-bottom: 12px;
+}
+
+.prediction-community .community-card-heading h4 {
+  font-size: 21px;
+}
+
+.prediction-comments-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.prediction-comment-card {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  background: var(--surface-alt);
+}
+
+.prediction-comment-card p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 11px;
+  line-height: 1.75;
+  overflow-wrap: anywhere;
+}
+
+.prediction-comment-card time {
+  color: var(--muted);
+  font-size: 9px;
+}
+
+.prediction-community-note {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.7;
+}
+
+.leaderboard-opt-in {
+  display: grid;
+  gap: 6px;
+  margin-top: 15px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  background: var(--surface-alt);
+}
+
+.leaderboard-opt-in label {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  color: var(--ink-soft);
+  font-size: 10px;
+  line-height: 1.6;
+  cursor: pointer;
+}
+
+.leaderboard-opt-in input {
+  flex: 0 0 auto;
+  margin-top: 2px;
+  accent-color: var(--gold);
+}
+
+.leaderboard-opt-in small {
+  padding-left: 23px;
+  color: var(--muted);
+  font-size: 9px;
+  line-height: 1.6;
+}
+
+.article-loading {
+  grid-column: 1 / -1;
+  padding: 24px;
+  color: var(--muted);
+  font-size: 11px;
+  text-align: center;
+}
+
+.featured-art.has-image {
+  background-position: center;
+  background-size: cover;
+}
+
+@keyframes predictionCardIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .prediction-card {
+    animation: predictionCardIn .55s ease both;
+  }
+  .prediction-card:nth-child(2) {
+    animation-delay: .1s;
+  }
+  .prediction-comment-card {
+    animation: predictionCardIn .4s ease both;
+  }
+}
+
+@media (max-width: 760px) {
+  .tradingview-container {
+    height: 410px;
+    min-height: 410px;
+  }
+  #tradingviewChart,
+  #tradingviewChart tv-advanced-chart {
+    min-height: 410px;
+  }
+  .prediction-comments-list {
+    grid-template-columns: 1fr;
+  }
+  .prediction-community {
+    padding: 17px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .prediction-card,
+  .prediction-comment-card {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+
+/* Prevent long Nepal currency values from overflowing narrow screens. */
+.rate-card,
+.rate-card > *,
+.prediction-card,
+.chart-panel,
+.market-layout {
+  min-width: 0;
+}
+
+.rate-value,
+.prediction-price strong {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 480px) {
+  .rate-value {
+    font-size: clamp(27px, 8vw, 34px);
+    letter-spacing: -1px;
+  }
+  .prediction-price strong {
+    font-size: clamp(16px, 5vw, 19px);
+  }
+}
+
+
+.prediction-note[data-kind="error"] {
+  color: #bd795e;
+}
+
+.prediction-note[data-kind="success"] {
+  color: #588b68;
+}
+
+
+/* ===== UI FIXES: DARK MODE + CHARTS + CHALLENGE ===== */
+
+html[data-theme="dark"] {
+  --green-dark: #101713;
+  --paper: #151c18;
+  --paper-deep: #1c2620;
+  --surface: #202b24;
+  --surface-alt: #26332b;
+  --ink: #f3efe5;
+  --ink-soft: #d0d5ca;
+  --muted: #aeb8aa;
+  --line: #39483d;
+}
+
+/* Gold and silver charts side by side */
+.nepal-chart-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  width: 100%;
+}
+
+.nepal-chart-card {
+  min-width: 0;
+  padding: 26px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  box-shadow: var(--shadow);
+  transition: transform .3s ease, box-shadow .3s ease;
+}
+
+.nepal-chart-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow);
+}
+
+.nepal-chart-heading h3 {
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 23px;
+}
+
+.nepal-chart-heading p {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.nepal-chart-container {
+  width: 100%;
+  min-width: 0;
+  min-height: 280px;
+  border-top: 1px solid var(--line);
+  padding-top: 14px;
+}
+
+.nepal-chart-container canvas {
+  display: block;
+  width: 100% !important;
+  max-width: 100%;
+}
+
+/* Challenge banner: dark editorial design in both themes */
+.challenge-intro {
+  background:
+    radial-gradient(circle at 85% 50%, rgba(177,139,67,.16), transparent 32%),
+    linear-gradient(115deg, #172d24, #111b16);
+  color: #f5f1e8;
+  border: 1px solid rgba(177,139,67,.35);
+  border-radius: 4px;
+}
+
+.challenge-intro h3 {
+  color: #f5f1e8;
+}
+
+.challenge-intro h3 em {
+  color: #e0b968;
+}
+
+.challenge-intro p {
+  color: #d2d8ce;
+}
+
+.challenge-symbol {
+  width: 160px;
+  height: 160px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  border: 1px solid #dfbb70;
+  border-radius: 50%;
+  outline: 1px dashed rgba(223,187,112,.4);
+  outline-offset: 9px;
+  color: #dfbb70;
+}
+
+.challenge-symbol span {
+  font-family: var(--serif);
+  font-size: 58px;
+}
+
+.challenge-symbol small {
+  color: #d2d8ce;
+  letter-spacing: 3px;
+}
+
+/* Footer: maintain readable contrast */
+.site-footer {
+  background: #101713;
+  color: #f3efe5;
+}
+
+.site-footer .brand-copy strong {
+  color: #f3efe5;
+}
+
+.site-footer .footer-brand p,
+.site-footer .footer-column a,
+.site-footer .footer-column button,
+.site-footer .footer-bottom {
+  color: #cbd4c8;
+}
+
+/* Streak number */
+.streak-number {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+}
+
+.streak-number strong {
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 48px;
+}
+
+/* Responsive layout */
+@media (max-width: 900px) {
+  .nepal-chart-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .nepal-chart-card {
+    padding: 18px;
+  }
+
+  .challenge-symbol {
+    display: none;
+  }
+}
+
+/* Premium but restrained animations */
+@media (prefers-reduced-motion: no-preference) {
+  .nepal-chart-card {
+    animation: chartEnter .65s ease both;
+  }
+
+  .nepal-chart-card:nth-child(2) {
+    animation-delay: .12s;
+  }
+
+  .challenge-symbol {
+    animation: emblemFloat 7s ease-in-out infinite;
+  }
+
+  @keyframes chartEnter {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes emblemFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-7px); }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+
+/* =========================================================
+   SIGNATURE MOTION SYSTEM
+   Subtle editorial movement; no layout-affecting animation.
+   ========================================================= */
+
+/* Keep anchor movement smooth while respecting reduced-motion below. */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Scroll reveal: elements remain visible if JS/observer is unavailable. */
+.reveal {
+  opacity: 0;
+  transform: translate3d(0, 18px, 0);
+  transition:
+    opacity .58s cubic-bezier(.2, .65, .25, 1),
+    transform .58s cubic-bezier(.2, .65, .25, 1);
+  transition-delay: calc(var(--reveal-order, 0) * 55ms);
+  will-change: opacity, transform;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+/* Small interaction feedback for mouse/trackpad users only. */
+@media (hover: hover) and (pointer: fine) {
+  .rate-card,
+  .tool-card,
+  .article-card,
+  .nepal-chart-card,
+  .prediction-card,
+  .prediction-comment-card,
+  .quiz-card,
+  .streak-card {
+    transition:
+      transform .24s cubic-bezier(.2, .7, .25, 1),
+      border-color .24s ease,
+      box-shadow .24s ease,
+      background-color .24s ease;
+  }
+
+  .rate-card:hover,
+  .tool-card:hover,
+  .article-card:hover,
+  .nepal-chart-card:hover,
+  .prediction-card:hover,
+  .prediction-comment-card:hover,
+  .quiz-card:hover,
+  .streak-card:hover {
+    transform: translateY(-3px);
+  }
+
+  .desktop-nav a,
+  .footer-column a,
+  .text-link {
+    transition: color .2s ease, opacity .2s ease;
+  }
+
+  .desktop-nav a:hover,
+  .footer-column a:hover,
+  .text-link:hover {
+    color: var(--gold);
+  }
+}
+
+/* Tactile click feedback without changing an element's layout. */
+button,
+.button,
+a.button,
+[role="button"] {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+button:active,
+.button:active,
+a.button:active,
+[role="button"]:active {
+  transform: scale(.975);
+}
+
+button:focus-visible,
+a:focus-visible,
+[role="button"]:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+/* Theme changes feel intentional but stay quick. */
+body,
+.site-header,
+.site-footer,
+.rate-card,
+.tool-card,
+.article-card,
+.nepal-chart-card,
+.prediction-card,
+.quiz-card,
+.streak-card {
+  transition:
+    background-color .24s ease,
+    color .24s ease,
+    border-color .24s ease;
+}
+
+/* Avoid sticky hover states and excessive motion on touch devices. */
+@media (hover: none), (pointer: coarse) {
+  .rate-card:hover,
+  .tool-card:hover,
+  .article-card:hover,
+  .nepal-chart-card:hover,
+  .prediction-card:hover,
+  .prediction-comment-card:hover,
+  .quiz-card:hover,
+  .streak-card:hover {
+    transform: none;
+  }
+
+  .reveal {
+    transform: translate3d(0, 12px, 0);
+    transition-duration: .42s;
+  }
+}
+
+/* Accessibility: reveal immediately and remove motion when requested. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    transition-delay: 0ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .reveal,
+  .reveal.visible {
+    opacity: 1 !important;
+    transform: none !important;
+    will-change: auto;
+  }
+}
+
+
+/* =========================================================
+   FACEBOOK PAGE UPDATES — MODERATED CONTENT
+   ========================================================= */
+.facebook-updates-section {
+  padding-top: clamp(54px, 7vw, 88px);
+  padding-bottom: clamp(54px, 7vw, 88px);
+}
+
+.facebook-post-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.facebook-post-card {
+  min-width: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface, #fff);
+  border: 1px solid var(--line, #ddd);
+  border-radius: 3px;
+  box-shadow: var(--shadow);
+  transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+}
+
+.facebook-post-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(177, 139, 67, .55);
+}
+
+.facebook-post-image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  background: var(--paper-deep);
+}
+
+.facebook-post-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 20px;
+}
+
+.facebook-post-meta {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.facebook-post-source {
+  color: var(--gold);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1.6px;
+}
+
+.facebook-post-date {
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.facebook-post-message {
+  display: -webkit-box;
+  overflow: hidden;
+  margin: 0 0 18px;
+  color: var(--ink);
+  font-size: 13px;
+  line-height: 1.8;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 6;
+}
+
+.facebook-post-link {
+  margin-top: auto;
+  color: var(--gold);
+  font-size: 11px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.facebook-post-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.facebook-post-loading,
+.facebook-post-empty {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 24px;
+  color: var(--muted);
+  border: 1px dashed var(--line);
+  text-align: center;
+}
+
+html[data-theme="dark"] .facebook-post-card {
+  background: var(--surface);
+  border-color: var(--line);
+}
+
+@media (max-width: 900px) {
+  .facebook-post-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .facebook-post-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .facebook-post-body {
+    padding: 17px;
+  }
+}

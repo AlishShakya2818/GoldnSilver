@@ -12,6 +12,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="admin.css" />
+    <link rel="stylesheet" href="admin-motion.css" />
     <script
       src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
       defer
@@ -47,16 +48,24 @@
             <span>₨</span> Nepal Rates
           </button>
           <button class="admin-nav-link" data-view="predictions">
-            <span>↗</span> Predictions · later
+            <span>↗</span> Predictions
           </button>
           <button class="admin-nav-link" data-view="comments">
-            <span>☷</span> Comments · later
+            <span>☷</span> Comments
+            <i class="nav-count" id="pendingNavCount">0</i>
+          </button>
+          <button class="admin-nav-link" data-view="facebook">
+            <span>f</span> Facebook posts
+            <i class="nav-count" id="facebookPendingNavCount">0</i>
+          </button>
+          <button class="admin-nav-link" data-view="editorial">
+            <span>▤</span> Editorial
           </button>
           <button class="admin-nav-link" data-view="users">
-            <span>♙</span> Users · later
+            <span>♙</span> Users
           </button>
           <button class="admin-nav-link" data-view="rewards">
-            <span>✦</span> Rewards · later
+            <span>✦</span> Rewards
           </button>
         </nav>
 
@@ -202,8 +211,8 @@
                 </div>
                 <div class="health-row">
                   <span>International price cache</span>
-                  <strong class="health-ok" id="internationalCacheHealth">
-                    ● Connected
+                  <strong class="health-pending" id="internationalCacheHealth">
+                    ● Checking
                   </strong>
                 </div>
                 <div class="health-row">
@@ -213,8 +222,8 @@
                   </strong>
                 </div>
                 <div class="health-row">
-                  <span>Editorial imports</span
-                  ><strong class="health-pending">● Not connected</strong>
+                  <span>Published articles</span
+                  ><strong class="health-pending" id="editorialHealth">● Checking</strong>
                 </div>
               </article>
             </div>
@@ -469,119 +478,253 @@
           </section>
 
           <!-- PREDICTIONS -->
+          <!-- PREDICTIONS -->
           <section class="admin-view" id="view-predictions">
             <div class="view-heading">
               <div>
-                <p class="admin-eyebrow">MARKET ENGAGEMENT</p>
-                <h2>Gold <em>predictions</em></h2>
+                <p class="admin-eyebrow">NEPAL MARKET CHALLENGE</p>
+                <h2>Gold & Silver <em>predictions</em></h2>
                 <p>
-                  Prediction management will be connected after verified
-                  international market data and settlement rules are
-                  implemented.
+                  Open daily rounds, monitor participation and verify closing
+                  prices.
                 </p>
               </div>
-              <span class="demo-pill">NOT CONNECTED</span>
+              <button
+                class="admin-secondary-button"
+                id="refreshPredictionsButton"
+                type="button"
+              >
+                ↻ Refresh rounds
+              </button>
             </div>
 
             <div class="admin-info-strip">
               <span>i</span>
               <p>
-                Prediction rounds are not connected yet. No sample prices, votes
-                or participation totals are shown here. This section will be
-                connected after the international market data source and
-                prediction settlement rules are in place.
+                Opening prices are snapshots of published Nepal rates in NPR per
+                tola. Always verify the next day's published rate before
+                settling a round. A tie is treated as neutral.
               </p>
             </div>
 
             <article class="admin-panel">
               <div class="panel-heading">
                 <div>
-                  <h3>Round configuration</h3>
-                  <small>Controls to be connected to the backend later</small>
+                  <h3>Open today's prediction rounds</h3>
+                  <small
+                    >Gold and silver rounds are opened together using today's
+                    published rates.</small
+                  >
                 </div>
+                <span class="demo-pill">NEPAL · NPR / TOLA</span>
               </div>
-              <div class="settings-grid">
-                <label
-                  >Market instrument<input value="XAU/USD — Gold spot" disabled
-                /></label>
-                <label
-                  >Market price provider<input
-                    value="Provider API — not connected"
-                    disabled
-                /></label>
-                <label
-                  >Settlement method<input
-                    value="Completed daily market candle"
-                    disabled
-                /></label>
-                <label
-                  >Round status<input
-                    value="Open — demonstration only"
-                    disabled
-                /></label>
-              </div>
+
+              <form id="openNepalRoundsForm" class="settings-grid">
+                <label>
+                  Prediction deadline — Nepal time
+                  <input
+                    id="predictionClosesAt"
+                    type="datetime-local"
+                    required
+                  />
+                </label>
+                <div>
+                  <button
+                    class="admin-primary-button"
+                    id="openNepalRoundsButton"
+                    type="submit"
+                  >
+                    Open gold & silver rounds
+                  </button>
+                </div>
+              </form>
+
+              <p
+                id="predictionAdminMessage"
+                class="admin-form-message"
+                role="status"
+              ></p>
             </article>
+
+            <div class="panel-heading" style="margin-top: 24px">
+              <div>
+                <h3>Prediction history</h3>
+                <small>Live rounds and previously settled results</small>
+              </div>
+            </div>
+
+            <div id="predictionRoundList" class="prediction-admin-list">
+              <article class="admin-panel">Loading prediction rounds…</article>
+            </div>
           </section>
 
+          <!-- COMMENTS -->
           <!-- COMMENTS -->
           <section class="admin-view" id="view-comments">
             <div class="view-heading">
               <div>
                 <p class="admin-eyebrow">COMMUNITY MANAGEMENT</p>
                 <h2>Comment <em>moderation</em></h2>
-                <p>Review comments submitted with prediction explanations.</p>
+                <p>
+                  Review explanations submitted by registered prediction
+                  participants.
+                </p>
               </div>
+              <button
+                class="admin-secondary-button"
+                id="refreshCommentsButton"
+                type="button"
+              >
+                ↻ Refresh comments
+              </button>
             </div>
+
             <div class="admin-info-strip">
               <span>!</span>
               <p>
-                Only approved comments should be displayed publicly. Comment
-                moderation is not connected yet; no sample comments are shown.
+                New comments are private until approved. You can approve, reject
+                or hide comments. Rejected and hidden comments are not displayed
+                publicly.
               </p>
             </div>
-            <div class="comment-list" id="commentList"></div>
+
+            <div class="panel-heading">
+              <div>
+                <h3>Submitted comments</h3>
+                <small id="commentCount">Loading comments…</small>
+              </div>
+            </div>
+
+            <div class="comment-list" id="commentList">
+              <article class="admin-panel">Loading comments…</article>
+            </div>
           </section>
 
-          <!-- USERS -->
-          <section class="admin-view" id="view-users">
+          <!-- FACEBOOK POSTS: SEPARATE FROM EDITORIAL ARTICLES -->
+          <section class="admin-view" id="view-facebook">
             <div class="view-heading">
               <div>
-                <p class="admin-eyebrow">COMMUNITY</p>
-                <h2>Registered <em>users</em></h2>
-                <p>
-                  User management will be connected after the required secure
-                  admin functions are implemented.
-                </p>
+                <p class="admin-eyebrow">FACEBOOK CONTENT WORKFLOW</p>
+                <h2>Facebook <em>post review</em></h2>
+                <p>Import posts from the Gold N Silver Rates Facebook Page, then decide which ones appear on this website.</p>
+              </div>
+              <div class="facebook-toolbar">
+                <button type="button" class="admin-secondary-button" id="refreshFacebookButton">↻ Refresh</button>
+                <button type="button" class="admin-primary-button" id="syncFacebookButton">Sync Facebook posts</button>
               </div>
             </div>
-            <div class="admin-panel">
-              <div class="panel-heading">
-                <h3>Sample user directory</h3>
-                <span class="demo-pill">NOT CONNECTED</span>
-              </div>
-              <div class="table-wrap">
-                <table class="admin-table">
-                  <thead>
-                    <tr>
-                      <th>USER</th>
-                      <th>JOINED</th>
-                      <th>POINTS</th>
-                      <th>STREAK</th>
-                      <th>STATUS</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td colspan="5">
-                        Live user management is not connected. No sample user
-                        records are displayed.
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+
+            <div class="admin-info-strip">
+              <span>i</span>
+              <p>Website publishing is limited to five Facebook posts per Nepal calendar day. This does not limit Facebook posting or importing. Pending posts remain saved until reviewed. This workspace does not publish back to Facebook.</p>
             </div>
+
+            <div class="facebook-stats-grid">
+              <article class="admin-stat-card"><div class="stat-top"><span>PUBLISHED TODAY</span><b>↗</b></div><strong id="facebookPublishedToday">— / 5</strong><small id="facebookPublishedDate">Nepal calendar date</small></article>
+              <article class="admin-stat-card"><div class="stat-top"><span>SLOTS REMAINING</span><b>＋</b></div><strong id="facebookRemainingToday">—</strong><small>Available website publications today</small></article>
+              <article class="admin-stat-card"><div class="stat-top"><span>PENDING REVIEW</span><b>◷</b></div><strong id="facebookPendingCount">—</strong><small>Imported posts awaiting a decision</small></article>
+              <article class="admin-stat-card"><div class="stat-top"><span>IMPORTED POSTS</span><b>▤</b></div><strong id="facebookTotalCount">—</strong><small>All retained Facebook post records</small></article>
+            </div>
+
+            <article class="admin-panel facebook-list-panel">
+              <div class="panel-heading facebook-list-heading">
+                <div><h3>Imported Page posts</h3><small id="facebookListSummary">Choose a status to review imported content.</small></div>
+                <label class="facebook-filter-label" for="facebookStatusFilter">Show
+                  <select id="facebookStatusFilter">
+                    <option value="pending">Pending</option>
+                    <option value="approved">Published on website</option>
+                    <option value="rejected">Rejected</option>
+                    <option value="hidden">Hidden</option>
+                    <option value="all">All statuses</option>
+                  </select>
+                </label>
+              </div>
+              <div id="facebookAdminList" class="facebook-post-list" aria-live="polite">
+                <p class="facebook-empty-state">Facebook posts will appear here after the first successful sync.</p>
+              </div>
+            </article>
+            <p class="admin-form-message" id="facebookAdminMessage" role="status" aria-live="polite"></p>
           </section>
+
+          <!-- EDITORIAL ARTICLES REMAIN A SEPARATE SYSTEM -->
+          <section class="admin-view" id="view-editorial">
+          <div class="view-heading">
+            <div>
+              <span class="eyebrow">PUBLISHING WORKSPACE</span>
+              <h2>Editorial <em>manager</em></h2>
+              <p>Create, edit, save drafts and publish verified articles to the public journal.</p>
+            </div>
+            <button type="button" class="admin-primary-button" id="newArticleButton">New article</button>
+          </div>
+
+          <div class="admin-panel editorial-editor-panel">
+            <div class="panel-heading">
+              <div><h3 id="articleEditorHeading">Create an article</h3><small>Published articles appear in the public Journal section.</small></div>
+              <span class="status-chip pending" id="articleEditorStatus">DRAFT</span>
+            </div>
+            <form id="articleForm" class="editorial-form">
+              <input type="hidden" id="articleId" />
+              <div class="editorial-form-grid">
+                <div class="form-field">
+                  <label for="articleTitle">Article title</label>
+                  <input id="articleTitle" maxlength="250" required placeholder="Write a clear, useful headline" />
+                </div>
+                <div class="form-field">
+                  <label for="articleSlug">URL slug</label>
+                  <input id="articleSlug" maxlength="250" required placeholder="article-url-slug" />
+                </div>
+                <div class="form-field">
+                  <label for="articleCategory">Category</label>
+                  <select id="articleCategory" required></select>
+                </div>
+                <div class="form-field">
+                  <label for="articleImage">Featured image URL (optional)</label>
+                  <input id="articleImage" type="url" placeholder="https://…" />
+                </div>
+                <div class="form-field editorial-full">
+                  <label for="articleExcerpt">Short introduction</label>
+                  <textarea id="articleExcerpt" rows="2" maxlength="500" placeholder="A concise summary shown on article cards"></textarea>
+                </div>
+                <div class="form-field editorial-full">
+                  <label for="articleBody">Article body</label>
+                  <textarea id="articleBody" rows="12" required placeholder="Write paragraphs separated by a blank line. Start a line with ## for a section heading, or > for a quotation."></textarea>
+                  <small>Use plain text. Separate paragraphs with a blank line. Use ## Heading for section headings.</small>
+                </div>
+              </div>
+              <div class="editorial-actions">
+                <button type="button" class="admin-secondary-button" id="resetArticleForm">Clear form</button>
+                <button type="submit" class="admin-secondary-button" id="saveArticleDraft">Save draft</button>
+                <button type="button" class="admin-primary-button" id="publishArticleButton">Publish article</button>
+              </div>
+              <p class="admin-form-message" id="articleFormMessage" role="status" aria-live="polite"></p>
+            </form>
+          </div>
+
+          <div class="admin-panel">
+            <div class="panel-heading"><div><h3>Editorial library</h3><small>Drafts and published stories</small></div><button type="button" class="admin-secondary-button" id="refreshArticlesButton">Refresh</button></div>
+            <div id="adminArticleList" class="admin-article-list"><p>Loading editorial content…</p></div>
+          </div>
+        </section>
+
+        <section class="admin-view" id="view-users">
+          <div class="view-heading">
+            <div>
+              <p class="admin-eyebrow">COMMUNITY</p>
+              <h2>Registered <em>users</em></h2>
+              <p>Read-only member directory with quiz progress. Email addresses and private account details are not displayed.</p>
+            </div>
+            <button type="button" class="admin-secondary-button" id="refreshUsersButton">Refresh users</button>
+          </div>
+          <div class="admin-panel">
+            <div class="panel-heading"><h3>Member directory</h3><span id="userDirectoryCount">Loading…</span></div>
+            <div class="table-wrap">
+              <table class="admin-table">
+                <thead><tr><th>MEMBER</th><th>JOINED</th><th>POINTS</th><th>QUIZZES</th><th>STREAK</th></tr></thead>
+                <tbody id="userDirectory"><tr><td colspan="5">Loading registered members…</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
 
           <!-- REWARDS -->
           <section class="admin-view" id="view-rewards">
@@ -589,35 +732,12 @@
               <div>
                 <p class="admin-eyebrow">ENGAGEMENT SETTINGS</p>
                 <h2>Rewards & <em>badges</em></h2>
-                <p>
-                  Preview the achievement system planned for registered members.
-                </p>
+                <p>Live badge definitions and the number of members who have earned each achievement.</p>
               </div>
+              <button type="button" class="admin-secondary-button" id="refreshRewardsButton">Refresh rewards</button>
             </div>
-            <div class="badge-grid">
-              <article class="badge-card">
-                <span>✧</span><strong>7-Day Streak</strong
-                ><small>Complete a quiz on seven consecutive days</small
-                ><b>Badge only · no bonus points</b>
-              </article>
-              <article class="badge-card">
-                <span>♛</span><strong>30-Day Streak</strong
-                ><small>Complete a quiz on thirty consecutive days</small
-                ><b>Badge only · no bonus points</b>
-              </article>
-              <article class="badge-card">
-                <span>◆</span><strong>Century Scholar</strong
-                ><small>Answer 100 daily quiz questions correctly</small
-                ><b>Badge only · no bonus points</b>
-              </article>
-            </div>
-            <div class="admin-info-strip">
-              <span>i</span>
-              <p>
-                Correct quiz answers award 10 points. Streaks and achievement
-                badges are tracked separately and do not award bonus points.
-                Badges have no cash value.
-              </p>
+            <div id="rewardBadgeList" class="badge-grid">
+              <p>Loading badge definitions…</p>
             </div>
           </section>
         </div>

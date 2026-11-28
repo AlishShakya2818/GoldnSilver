@@ -1,0 +1,1 @@
+grant select, insert, update on public.facebook_posts to service_role;

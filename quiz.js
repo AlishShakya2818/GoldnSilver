@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (el.points) el.points.textContent = Number(stats.total_points || 0).toLocaleString();
     if (el.streak) {
       const streak = Number(stats.current_streak || 0);
-      el.streak.textContent = `${streak} ${streak === 1 ? 'day' : 'days'}`;
+      el.streak.textContent = String(streak);r
     }
     document.dispatchEvent(new CustomEvent('gns:quiz-updated', { detail: { stats } }));
   }
@@ -342,23 +342,33 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('dailyQuiz')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
   });
 
-  client?.auth.onAuthStateChange(async (event, session) => {
-    if (event === 'SIGNED_OUT') {
-      currentUser = null;
+  // Keep Supabase auth callbacks synchronous; run database work after the callback returns.
+  client?.auth.onAuthStateChange((event, session) => {
+    if (event !== 'SIGNED_OUT' && event !== 'SIGNED_IN') return;
+    Promise.resolve().then(async () => {
+      if (event === 'SIGNED_OUT') {
+        currentUser = null;
+        guestTokenHash = null;
+        localStorage.removeItem(GUEST_TOKEN_KEY);
+        try { await initialise(); } catch (error) { console.warn(error); }
+        return;
+      }
+      currentUser = session?.user || null;
+      if (!currentUser) return;
+      try {
+        const pendingGuestHash = await getStoredGuestHash(false);
+        if (pendingGuestHash) await claimGuestProgress(pendingGuestHash);
+      } catch (error) {
+        console.warn('Guest progress transfer:', error.message);
+      }
       guestTokenHash = null;
-      localStorage.removeItem(GUEST_TOKEN_KEY);
-      try { await initialise(); } catch (error) { console.warn(error); }
-      return;
-    }
-    if (event !== 'SIGNED_IN') return;
-    currentUser = session?.user || null;
-    if (!currentUser) return;
-    try {
-      const pendingGuestHash = await getStoredGuestHash(false);
-      if (pendingGuestHash) await claimGuestProgress(pendingGuestHash);
-    } catch (error) { console.warn('Guest progress transfer:', error.message); }
-    guestTokenHash = null;
-    try { await renderQuiz(); await loadStats(); } catch (error) { console.warn(error); }
+      try {
+        await renderQuiz();
+        await loadStats();
+      } catch (error) {
+        console.warn(error);
+      }
+    });
   });
 
   initialise();

@@ -18,6 +18,7 @@
     />
 
     <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="motion.css" />
 
     <!-- Supabase JavaScript library -->
     <script
@@ -39,6 +40,8 @@
     <!-- Existing daily quiz -->
     <script src="quiz.js" defer></script>
     <script src="challenge-extras.js" defer></script>
+    <script src="motion.js" defer></script>
+    <script type="module" src="https://widgets.tradingview-widget.com/w/en/tv-advanced-chart.js"></script>
   </head>
 
   <body>
@@ -289,7 +292,10 @@
 
             <div class="rate-card-line"></div>
 
-            <p class="rate-footnote">Verified Nepal rate not connected</p>
+            <p class="rate-footnote">
+              Official Nepal market rate · NPR per tola
+            </p>
+            <p class="rate-10g" id="goldRate10g">Per 10g: —</p>
           </article>
 
           <article class="rate-card silver-card">
@@ -312,14 +318,151 @@
 
             <div class="rate-card-line"></div>
 
-            <p class="rate-footnote">Verified Nepal rate not connected</p>
+            <p class="rate-footnote">
+              Official Nepal market rate · NPR per tola
+            </p>
+            <p class="rate-10g" id="silverRate10g">Per 10g: —</p>
           </article>
         </div>
 
         <p class="rate-disclaimer">
-          These are demonstration figures for the frontend preview. They are not
-          official or current market quotations.
+          Nepal rates are published by the site administrator. Refer to the
+          displayed source and update date when using these figures.
         </p>
+      </section>
+
+      <!-- NEPAL HISTORICAL MARKET TRENDS -->
+      <section class="nepal-history-section section-wrap" id="nepalHistory">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">TRACK THE LOCAL MARKET</p>
+            <h2>Nepal market <em>trends</em></h2>
+          </div>
+          <p class="section-aside">
+            Historical local rates<br />
+            NPR per tola
+          </p>
+        </div>
+
+        <div class="nepal-chart-grid">
+          <article class="nepal-chart-card">
+            <div class="nepal-chart-heading">
+              <div>
+                <span class="panel-label">GOLD · NEPAL</span>
+                <h3>Gold price history</h3>
+                <p id="nepalGoldChartSummary">Waiting for historical records</p>
+              </div>
+
+              <div
+                class="nepal-chart-filters"
+                role="group"
+                aria-label="Gold chart period"
+              >
+                <button
+                  type="button"
+                  data-nepal-metal="gold"
+                  data-nepal-period="7"
+                >
+                  7D
+                </button>
+                <button
+                  type="button"
+                  data-nepal-metal="gold"
+                  data-nepal-period="30"
+                  class="active"
+                  aria-pressed="true"
+                >
+                  30D
+                </button>
+                <button
+                  type="button"
+                  data-nepal-metal="gold"
+                  data-nepal-period="90"
+                >
+                  90D
+                </button>
+                <button
+                  type="button"
+                  data-nepal-metal="gold"
+                  data-nepal-period="365"
+                >
+                  1Y
+                </button>
+              </div>
+            </div>
+
+            <div class="nepal-chart-container">
+              <canvas
+                id="nepalGoldChart"
+                aria-label="Nepal gold historical rates chart"
+              ></canvas>
+              <p id="nepalGoldChartEmpty">
+                Historical gold prices will appear as genuine daily records
+                accumulate.
+              </p>
+            </div>
+          </article>
+
+          <article class="nepal-chart-card">
+            <div class="nepal-chart-heading">
+              <div>
+                <span class="panel-label">SILVER · NEPAL</span>
+                <h3>Silver price history</h3>
+                <p id="nepalSilverChartSummary">
+                  Waiting for historical records
+                </p>
+              </div>
+
+              <div
+                class="nepal-chart-filters"
+                role="group"
+                aria-label="Silver chart period"
+              >
+                <button
+                  type="button"
+                  data-nepal-metal="silver"
+                  data-nepal-period="7"
+                >
+                  7D
+                </button>
+                <button
+                  type="button"
+                  data-nepal-metal="silver"
+                  data-nepal-period="30"
+                  class="active"
+                  aria-pressed="true"
+                >
+                  30D
+                </button>
+                <button
+                  type="button"
+                  data-nepal-metal="silver"
+                  data-nepal-period="90"
+                >
+                  90D
+                </button>
+                <button
+                  type="button"
+                  data-nepal-metal="silver"
+                  data-nepal-period="365"
+                >
+                  1Y
+                </button>
+              </div>
+            </div>
+
+            <div class="nepal-chart-container">
+              <canvas
+                id="nepalSilverChart"
+                aria-label="Nepal silver historical rates chart"
+              ></canvas>
+              <p id="nepalSilverChartEmpty">
+                Historical silver prices will appear as genuine daily records
+                accumulate.
+              </p>
+            </div>
+          </article>
+        </div>
       </section>
 
       <!-- MARKET WATCH -->
@@ -380,9 +523,7 @@
               <span class="chart-market-badge">INTERNATIONAL</span>
             </div>
 
-            <div class="chart-container tradingview-container">
-              <!-- International spot prices -->
-              <div class="international-prices" id="internationalPricePanel">
+<div class="international-prices" id="internationalPricePanel">
                 <div class="international-prices-heading">
                   <div>
                     <span class="international-eyebrow">GLOBAL MARKET</span>
@@ -443,14 +584,20 @@
                   >.
                 </p>
               </div>
-              <!-- End international spot prices -->
-              <div
-                id="tradingviewChart"
-                aria-label="TradingView international gold and silver chart"
-              >
-                <div class="tradingview-loading">
-                  Loading TradingView chart…
-                </div>
+
+            <div class="chart-container tradingview-container"><div id="tradingviewChart" aria-label="TradingView international gold and silver chart">
+                <tv-advanced-chart
+                  id="tradingviewWidget"
+                  symbol="OANDA:XAUUSD"
+                  interval="60"
+                  timezone="Asia/Kathmandu"
+                  theme="light"
+                >
+                  <div class="tradingview-loading" role="status">
+                    Loading the international TradingView chart…
+                    <a href="https://www.tradingview.com/symbols/OANDA-XAUUSD/" target="_blank" rel="noopener noreferrer">Open chart on TradingView</a>
+                  </div>
+                </tv-advanced-chart>
               </div>
             </div>
 
@@ -477,7 +624,13 @@
               source is connected.
             </p>
 
-            <div class="regional-list" id="regionalGrid"></div>
+            <div class="regional-list" id="regionalGrid">
+              <article class="regional-reference-card">
+                <span class="panel-label">NATIONAL REFERENCE</span>
+                <strong>Published Nepal rates</strong>
+                <p>See today's verified NPR-per-tola rates above. Individual jeweller quotations may differ.</p>
+              </article>
+            </div>
           </aside>
         </div>
       </section>
@@ -622,121 +775,82 @@
           </a>
         </div>
 
-        <!-- MARKET PREDICTION CHALLENGE -->
-        <div class="prediction-section">
+        <!-- NEPAL MARKET PREDICTION CHALLENGE -->
+        <div class="prediction-section" id="nepalPredictionChallenge">
           <div class="challenge-subheading">
             <div>
-              <p class="eyebrow">THE MARKET CALL</p>
+              <p class="eyebrow">THE MARKET CALL · NEPAL</p>
               <h3>Higher or <em>lower?</em></h3>
-              <p>Make your call on the next market movement.</p>
+              <p>Predict tomorrow's published Nepal rate using today's opening rate.</p>
             </div>
-            <span class="preview-tag">COMING AFTER DATA CONNECTION</span>
+            <span class="preview-tag" id="predictionOverallStatus">LIVE NEPAL ROUNDS</span>
           </div>
-
           <div class="prediction-grid">
-            <!-- GOLD -->
-            <article class="prediction-card">
+            <article class="prediction-card" data-prediction-card="gold">
               <div class="prediction-card-top">
                 <span class="prediction-metal gold-metal">Au</span>
-                <div>
-                  <span class="prediction-label">GOLD MARKET</span>
-                  <h4>Gold / USD</h4>
-                </div>
-                <span class="prediction-status">NOT CONNECTED</span>
+                <div><span class="prediction-label">NEPAL GOLD</span><h4>Gold · NPR / tola</h4></div>
+                <span class="prediction-status" id="goldPredictionStatus">Loading</span>
               </div>
-
               <div class="prediction-price">
-                <span>Current provider price</span>
-                <strong>Awaiting connection</strong>
-                <small
-                  >Live price will appear when a data provider is
-                  connected.</small
-                >
+                <span>Round opening rate</span>
+                <strong id="goldPredictionRate">Loading…</strong>
+                <small id="goldPredictionMeta">Checking today's Nepal prediction round…</small>
               </div>
-
-              <p class="prediction-question">
-                Where do you think gold will move?
-              </p>
-
-              <div class="prediction-choices">
-                <button type="button" data-metal="gold" data-choice="higher">
-                  <span>↗</span>
-                  Higher
-                </button>
-                <button type="button" data-metal="gold" data-choice="lower">
-                  <span>↘</span>
-                  Lower
-                </button>
+              <p class="prediction-question">Where will the next published Nepal gold rate move?</p>
+              <div class="prediction-choices" role="group" aria-label="Choose gold price direction">
+                <button type="button" data-metal="gold" data-choice="higher" aria-pressed="false"><span>↗</span> Higher</button>
+                <button type="button" data-metal="gold" data-choice="lower" aria-pressed="false"><span>↘</span> Lower</button>
               </div>
-
-              <button
-                class="prediction-submit"
-                type="button"
-                data-submit-prediction="gold"
-                disabled
-              >
-                Sign in to make your prediction ↗
-              </button>
-              <p class="prediction-note" id="goldPredictionMessage">
-                Account required · No entry fee · For learning and entertainment
-              </p>
+              <button class="prediction-submit" type="button" data-submit-prediction="gold" disabled>Loading round…</button>
+              <p class="prediction-note" id="goldPredictionMessage" role="status" aria-live="polite">Loading Nepal gold prediction round…</p>
+              <form class="prediction-comment-form" data-comment-form="gold" hidden>
+                <label for="goldPredictionComment">Share your reasoning (optional)</label>
+                <textarea id="goldPredictionComment" data-comment-input="gold" maxlength="1000" rows="3" placeholder="What market factors influenced your prediction?"></textarea>
+                <button class="prediction-comment-submit" type="submit">Submit comment for review</button>
+                <small data-comment-message="gold"></small>
+              </form>
             </article>
-
-            <!-- SILVER -->
-            <article class="prediction-card">
+            <article class="prediction-card" data-prediction-card="silver">
               <div class="prediction-card-top">
                 <span class="prediction-metal silver-metal">Ag</span>
-                <div>
-                  <span class="prediction-label">SILVER MARKET</span>
-                  <h4>Silver / USD</h4>
-                </div>
-                <span class="prediction-status">NOT CONNECTED</span>
+                <div><span class="prediction-label">NEPAL SILVER</span><h4>Silver · NPR / tola</h4></div>
+                <span class="prediction-status" id="silverPredictionStatus">Loading</span>
               </div>
-
               <div class="prediction-price">
-                <span>Current provider price</span>
-                <strong>Awaiting connection</strong>
-                <small
-                  >Live price will appear when a data provider is
-                  connected.</small
-                >
+                <span>Round opening rate</span>
+                <strong id="silverPredictionRate">Loading…</strong>
+                <small id="silverPredictionMeta">Checking today's Nepal prediction round…</small>
               </div>
-
-              <p class="prediction-question">
-                Where do you think silver will move?
-              </p>
-
-              <div class="prediction-choices">
-                <button type="button" data-metal="silver" data-choice="higher">
-                  <span>↗</span>
-                  Higher
-                </button>
-                <button type="button" data-metal="silver" data-choice="lower">
-                  <span>↘</span>
-                  Lower
-                </button>
+              <p class="prediction-question">Where will the next published Nepal silver rate move?</p>
+              <div class="prediction-choices" role="group" aria-label="Choose silver price direction">
+                <button type="button" data-metal="silver" data-choice="higher" aria-pressed="false"><span>↗</span> Higher</button>
+                <button type="button" data-metal="silver" data-choice="lower" aria-pressed="false"><span>↘</span> Lower</button>
               </div>
-
-              <button
-                class="prediction-submit"
-                type="button"
-                data-submit-prediction="silver"
-                disabled
-              >
-                Sign in to make your prediction ↗
-              </button>
-              <p class="prediction-note" id="silverPredictionMessage">
-                Account required · No entry fee · For learning and entertainment
-              </p>
+              <button class="prediction-submit" type="button" data-submit-prediction="silver" disabled>Loading round…</button>
+              <p class="prediction-note" id="silverPredictionMessage" role="status" aria-live="polite">Loading Nepal silver prediction round…</p>
+              <form class="prediction-comment-form" data-comment-form="silver" hidden>
+                <label for="silverPredictionComment">Share your reasoning (optional)</label>
+                <textarea id="silverPredictionComment" data-comment-input="silver" maxlength="1000" rows="3" placeholder="What market factors influenced your prediction?"></textarea>
+                <button class="prediction-comment-submit" type="submit">Submit comment for review</button>
+                <small data-comment-message="silver"></small>
+              </form>
             </article>
           </div>
-
           <p class="prediction-disclaimer">
-            This is intended as an educational market prediction game, not
-            financial advice or a betting product. Live provider prices and
-            prediction rounds are not connected yet, so no predictions can
-            currently be submitted.
+            This is a free educational community challenge, not a betting product or financial advice.
+            Opening and settlement rates use published Nepal rates in NPR per tola. Results are settled
+            by an administrator after the next verified rate is published. Comments appear only after review.
           </p>
+          <div class="prediction-community">
+            <div class="community-card-heading">
+              <div><p class="quiz-eyebrow">COMMUNITY NOTES</p><h4>Approved market perspectives</h4></div>
+              <span>✦</span>
+            </div>
+            <div id="approvedPredictionComments" class="prediction-comments-list" aria-live="polite">
+              <p class="prediction-community-note">Loading approved comments…</p>
+            </div>
+          </div>
         </div>
 
         <!-- LEADERBOARD AND ACHIEVEMENTS -->
@@ -769,6 +883,13 @@
                 </button>
               </div>
 
+              <div class="leaderboard-opt-in">
+                <label for="leaderboardOptIn">
+                  <input type="checkbox" id="leaderboardOptIn" disabled />
+                  <span>Show my display name and quiz score on the public leaderboard</span>
+                </label>
+                <small id="leaderboardOptInMessage">Sign in to manage your leaderboard visibility.</small>
+              </div>
               <div class="leaderboard-list" id="leaderboardList"></div>
 
               <p class="leaderboard-footnote" id="leaderboardFootnote">
@@ -820,6 +941,27 @@
             </article>
           </div>
         </div>
+      </section>
+
+
+      <!-- FACEBOOK PAGE UPDATES: separately moderated from editorial articles -->
+      <section class="facebook-updates-section section-wrap" id="facebook-updates">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">FROM OUR FACEBOOK PAGE</p>
+            <h2>Latest <em>updates.</em></h2>
+          </div>
+          <p class="section-aside">
+            Page updates, reviewed<br />
+            before appearing here
+          </p>
+        </div>
+        <div class="facebook-post-grid" id="facebookPostGrid" aria-live="polite">
+          <p class="facebook-post-loading">Loading the latest page updates…</p>
+        </div>
+        <p class="facebook-post-empty" id="facebookPostEmpty" hidden>
+          No approved Facebook updates are available yet. Please check back soon.
+        </p>
       </section>
 
       <!-- ARTICLES -->
@@ -1257,5 +1399,6 @@
       </section>
     </div>
     <!-- END ACCOUNT AUTHENTICATION MODAL -->
+      <script src="facebook-posts.js" defer></script>
   </body>
 </html>

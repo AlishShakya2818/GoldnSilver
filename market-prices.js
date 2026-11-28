@@ -157,6 +157,8 @@
             );
 
             setText("internationalPriceStatus", "Unable to load prices");
+            setText("internationalGoldPrice", "Unavailable");
+            setText("internationalSilverPrice", "Unavailable");
 
             setText(
                 "internationalGoldUpdated",

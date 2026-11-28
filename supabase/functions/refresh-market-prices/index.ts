@@ -73,7 +73,7 @@ Deno.serve(async (req: Request) => {
   try {
     for (const item of metals) {
       const apiUrl =
-        `https://goldapi.dev/api/v1/price/${item.symbol}/USD`;
+        https://goldapi.dev/api/v1/price/${item.symbol}/USD;
 
       const response = await fetch(apiUrl, {
         method: "GET",
@@ -87,12 +87,12 @@ Deno.serve(async (req: Request) => {
       if (!response.ok) {
         const errorText = await response.text();
         console.error(
-          `GoldAPI request failed for ${item.symbol}:`,
+          GoldAPI request failed for ${item.symbol}:,
           response.status,
           errorText.slice(0, 300),
         );
         throw new Error(
-          `Price provider returned HTTP ${response.status} for ${item.symbol}`,
+          Price provider returned HTTP ${response.status} for ${item.symbol},
         );
       }
 
@@ -107,13 +107,13 @@ Deno.serve(async (req: Request) => {
         data.price <= 0 ||
         typeof data.updatedAt !== "string"
       ) {
-        throw new Error(`Invalid price response for ${item.symbol}`);
+        throw new Error(Invalid price response for ${item.symbol});
       }
 
       const observedAt = new Date(data.updatedAt);
 
       if (Number.isNaN(observedAt.getTime())) {
-        throw new Error(`Invalid observation timestamp for ${item.symbol}`);
+        throw new Error(Invalid observation timestamp for ${item.symbol});
       }
 
       const { error } = await supabase
@@ -122,7 +122,7 @@ Deno.serve(async (req: Request) => {
           {
             metal: item.metal,
             provider: "goldapi.dev",
-            provider_symbol: `${item.symbol}/USD`,
+            provider_symbol: ${item.symbol}/USD,
             quote_currency: "USD",
             price_per_troy_ounce: data.price,
             observed_at: observedAt.toISOString(),
@@ -137,8 +137,8 @@ Deno.serve(async (req: Request) => {
         );
 
       if (error) {
-        console.error(`Database save failed for ${item.symbol}:`, error);
-        throw new Error(`Could not save ${item.symbol} price`);
+        console.error(Database save failed for ${item.symbol}:, error);
+        throw new Error(Could not save ${item.symbol} price);
       }
 
       saved.push(item.metal);
